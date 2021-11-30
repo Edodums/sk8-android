@@ -2,12 +2,12 @@
 
 buildscript {
     ext {
-        compose_version = '1.0.1'
+        compose_version = '1.1.0-beta03'
         compose_navigation_version = '2.4.0-beta02'
         room_version = '2.3.0'
-        kotlin_version = '1.5.30'
+        kotlin_version = '1.5.31'
         gradle_version = '7.0.3'
-        ksp_version = '1.5.30-1.0.0-beta09'
+        ksp_version = '1.6.0-1.0.1'
     }
 
     repositories {
@@ -19,7 +19,7 @@ buildscript {
         classpath "com.android.tools.build:gradle:$gradle_version"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.google.devtools.ksp:symbol-processing-api:$ksp_version"
-        // NOTE: Do not place your application dependencies here; they belong
+        classpath 'com.google.gms:google-services:4.3.10'
         // in the individual module build.gradle files
     }
 }
