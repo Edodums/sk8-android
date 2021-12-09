@@ -57,3 +57,6 @@ val md_theme_dark_inverseSurface = Color(0xFFE6E1E5)
 
 val seed = Color(0xFF6750A4)
 val error = Color(0xFFB3261E)
+
+
+val lunacy_auth_background = Color(0xFF4611A8)
