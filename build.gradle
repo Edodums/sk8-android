@@ -2,17 +2,16 @@
 
 buildscript {
     ext {
-        compose_version = '1.1.0-beta04'
+        compose_version = '1.1.0-beta03'
         compose_navigation_version = '2.4.0-beta02'
         room_version = '2.3.0'
         kotlin_version = '1.5.31'
         gradle_version = '7.0.3'
-        ksp_version = '1.5.31-1.0.1'
         hilt_version = '2.40.4'
         core_ktx = '1.7.0'
         app_compat = '1.4.0'
         material = '1.4.0'
-        material_3 = '1.0.0'
+        material_3 = '1.0.0-alpha02'
         runtime_ktx = '2.4.0'
         junit = '4.13.2'
         activity_compose = '1.4.0'
@@ -37,7 +36,6 @@ buildscript {
     dependencies {
         classpath "com.android.tools.build:gradle:$gradle_version"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "com.google.devtools.ksp:symbol-processing-api:$ksp_version"
         classpath 'com.google.gms:google-services:4.3.10'
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
 
