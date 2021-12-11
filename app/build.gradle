@@ -1,9 +1,18 @@
+import unibo.it.sk8.buildsrc.Libs
+
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
-    id 'com.google.gms.google-services'
+//    id 'com.google.gms.google-services'
     id 'dagger.hilt.android.plugin'
+    id 'com.diffplug.spotless'
+}
+
+// Reads the Google maps key that is used in the AndroidManifest
+Properties properties = new Properties()
+if (rootProject.file("local.properties").exists()) {
+    properties.load(rootProject.file("local.properties").newDataInputStream())
 }
 
 android {
@@ -11,37 +20,55 @@ android {
 
     defaultConfig {
         applicationId 'unibo.it.sk8'
-        minSdk 26
-        targetSdk 31
+        minSdkVersion 21
+        targetSdkVersion 31
         versionCode 1
-        versionName '1.0'
+        versionName "1.0"
+        vectorDrawables.useSupportLibrary = true
+        multiDexEnabled true
 
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
-        vectorDrawables {
-            useSupportLibrary true
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments["dagger.hilt.disableModulesHaveInstallInCheck"] = "true"
+            }
         }
     }
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
+        coreLibraryDesugaringEnabled true
+
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = '1.8'
         useIR = true
     }
+
     buildFeatures {
         compose true
+        // Disable unused AGP features
+        buildConfig false
+        aidl false
+        renderScript false
+        resValues false
+        shaders false
     }
+
     composeOptions {
-        kotlinCompilerExtensionVersion compose_version
+        kotlinCompilerExtensionVersion Libs.AndroidX.Compose.version
     }
+
     packagingOptions {
         resources {
             // for JNA and JNA-platform
@@ -56,50 +83,56 @@ android {
 }
 
 dependencies {
-    implementation "androidx.core:core-ktx:$core_ktx"
-    implementation "androidx.appcompat:appcompat:$app_compat"
-    implementation "com.google.android.material:material:$material"
-    implementation "androidx.compose.ui:ui:$compose_version"
-    implementation "androidx.compose.material:material:$compose_version"
-    implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$runtime_ktx"
-    implementation "androidx.activity:activity-compose:$activity_compose"
-    implementation "androidx.navigation:navigation-compose:$compose_navigation_version"
-    implementation "androidx.navigation:navigation-testing:$navigation_testing"
-    implementation "androidx.datastore:datastore-core:$datastore_core"
-    implementation "androidx.datastore:datastore-preferences:$datastore_preferences"
+    implementation Libs.Kotlin.stdlib
+    implementation Libs.Kotlin.Coroutines.android
 
-    testImplementation "junit:junit:$junit"
+    implementation Libs.AndroidX.Activity.activityCompose
+    implementation Libs.AndroidX.appcompat
+    implementation Libs.AndroidX.Compose.runtime
+    implementation Libs.AndroidX.Compose.runtimeLivedata
+    implementation Libs.AndroidX.Compose.foundation
+    implementation Libs.AndroidX.Compose.material
+    implementation Libs.AndroidX.Compose.layout
+    implementation Libs.AndroidX.Compose.animation
+    implementation Libs.AndroidX.Compose.tooling
+    implementation Libs.AndroidX.Lifecycle.viewModelCompose
 
-    androidTestImplementation "org.mockito:mockito-core:$mockito_core"
-    androidTestImplementation "androidx.test.ext:junit:$ext_junit"
-    androidTestImplementation "androidx.test:core-ktx:$test_core_ktx"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_core"
-    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
-    debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
-    // Needed for createComposeRule, but not createAndroidComposeRule:
-    debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
+    implementation Libs.AndroidX.Datastore.datastore_core
+    implementation Libs.AndroidX.Datastore.datastore_preferences
 
-    implementation "androidx.room:room-runtime:$room_version"
-    annotationProcessor "androidx.room:room-compiler:$room_version"
-    // To use Kotlin annotation processing tool (kapt)
-    kapt "androidx.room:room-compiler:$room_version"
-    // optional - Kotlin Extensions and Coroutines support for Room
-    implementation "androidx.room:room-ktx:$room_version"
+    implementation Libs.AndroidX.Lifecycle.viewModelKtx
+    implementation Libs.Hilt.android
+    kapt Libs.Hilt.compiler
 
-    implementation "androidx.compose.material3:material3:$material_3"
-    implementation "androidx.navigation:navigation-compose:$navigation_compose"
+    implementation Libs.Coil.coilCompose
 
-    implementation "com.google.dagger:hilt-android:$hilt_version"
-    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+    debugImplementation Libs.AndroidX.Compose.uiTestManifest
 
-    implementation "androidx.hilt:hilt-navigation-compose:$hilt_navigation_compose"
+    androidTestImplementation Libs.JUnit.junit
+    androidTestImplementation Libs.AndroidX.Test.core
+    androidTestImplementation Libs.AndroidX.Test.runner
+    androidTestImplementation Libs.AndroidX.Test.espressoCore
+    androidTestImplementation Libs.AndroidX.Test.rules
+    androidTestImplementation Libs.AndroidX.Test.Ext.junit
+    androidTestImplementation Libs.Kotlin.Coroutines.test
+    androidTestImplementation Libs.AndroidX.Compose.uiTest
+    androidTestImplementation Libs.Hilt.android
+    androidTestImplementation Libs.Hilt.testing
+    androidTestImplementation Libs.Mockito.mockito_core
 
-    implementation "aws.sdk.kotlin:dynamodb:$dynamo_db"
+    kaptAndroidTest Libs.Hilt.compiler
 
-    implementation "com.amplifyframework:aws-auth-cognito:$auth_cognito"
-}
+    implementation Libs.Amplify.aws_datastore
+    implementation Libs.Amplify.aws_auth_cognito
 
-kapt {
-    correctErrorTypes = true
+    implementation Libs.AndroidX.Room.room_runtime
+    annotationProcessor Libs.AndroidX.Room.room_compiler
+    kapt Libs.AndroidX.Room.room_compiler
+    implementation Libs.AndroidX.Room.room_ktx
+
+    implementation Libs.AndroidX.Compose.navigation_compose
+    implementation Libs.AndroidX.Compose.hilt_navigation_compose
+    implementation Libs.AndroidX.Compose.material3
+
+    coreLibraryDesugaring Libs.Desugar.desugar
 }
