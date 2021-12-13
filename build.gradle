@@ -35,7 +35,7 @@ subprojects {
             target '**/*.kt'
             targetExclude("$buildDir/**/*.kt")
             targetExclude('bin/**/*.kt')
-            ktlint(Versions.ktLint)
+            ktlint(Versions.ktLint).userData([android: "true"])
             licenseHeaderFile rootProject.file('app/src/main/java/unibo/it/sk8/spotless/copyright.kt')
         }
     }

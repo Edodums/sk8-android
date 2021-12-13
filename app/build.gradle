@@ -25,7 +25,7 @@ android {
         versionCode 1
         versionName "1.0"
         vectorDrawables.useSupportLibrary = true
-        multiDexEnabled true
+        multiDexEnabled = true
 
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
 
@@ -133,6 +133,8 @@ dependencies {
     implementation Libs.AndroidX.Compose.navigation_compose
     implementation Libs.AndroidX.Compose.hilt_navigation_compose
     implementation Libs.AndroidX.Compose.material3
+
+    implementation("androidx.multidex:multidex:2.0.1")
 
     coreLibraryDesugaring Libs.Desugar.desugar
 }

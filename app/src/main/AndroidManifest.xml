@@ -8,12 +8,13 @@
 
     <application
         android:allowBackup="true"
+        android:name=".SK8"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         tools:targetApi="donut"
-        tools:ignore="RtlEnabled">
+        tools:ignore="AllowBackup,RtlEnabled">
         <activity
             android:name=".MainActivity"
             android:exported="true"
