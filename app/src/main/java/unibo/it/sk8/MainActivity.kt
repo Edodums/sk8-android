@@ -5,24 +5,19 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.navigation.compose.rememberNavController
 import com.amplifyframework.AmplifyException
+import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin
 import com.amplifyframework.core.Amplify
 import dagger.hilt.android.AndroidEntryPoint
-import unibo.it.sk8.navigation.NavigationManager
-import javax.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import unibo.it.sk8.navigation.Nav
 import unibo.it.sk8.ui.theme.Sk8Theme
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @Inject
-    lateinit var navigationManager: NavigationManager
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,13 +27,6 @@ class MainActivity : ComponentActivity() {
         fullScreen()
 
         setContent {
-            val navController = rememberNavController()
-            navigationManager.commands.collectAsState().value.also { command ->
-                if (command.destination.isNotEmpty()) {
-                    navController.navigate(command.destination)
-                }
-            }
-
             SK8App()
         }
     }
@@ -47,12 +35,13 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun SK8App() {
         Sk8Theme {
-            Nav(navController = rememberNavController())
+            Nav()
         }
     }
 
     private fun configureAmplify() {
         try {
+            Amplify.addPlugin(AWSCognitoAuthPlugin())
             Amplify.configure(applicationContext)
             Log.i(APP_NAME, "Initialized Amplify")
         } catch (error: AmplifyException) {

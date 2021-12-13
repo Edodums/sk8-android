@@ -2,70 +2,44 @@ package unibo.it.sk8.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NamedNavArgument
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import unibo.it.sk8.auth.Auth
+import unibo.it.sk8.auth.AuthScreen
 import unibo.it.sk8.auth.AuthViewModel
-import unibo.it.sk8.loading.Loading
+import unibo.it.sk8.loading.LoadingScreen
 import unibo.it.sk8.loading.LoadingViewModel
-import unibo.it.sk8.menu.Menu
+import unibo.it.sk8.menu.MenuScreen
 import unibo.it.sk8.menu.MenuViewModel
 
 object Destinations {
-    val Default = object : NavigationCommand {
-
-        override val arguments = emptyList<NamedNavArgument>()
-
-        override val destination = ""
-
-    }
-
-    val loading = object : NavigationCommand {
-
-        override val arguments = emptyList<NamedNavArgument>()
-
-        override val destination = "loading"
-
-    }
-
-    val authentication = object : NavigationCommand {
-
-        override val arguments = emptyList<NamedNavArgument>()
-
-        override val destination = "auth"
-
-    }
-
-    val menu = object : NavigationCommand {
-
-        override val arguments = emptyList<NamedNavArgument>()
-
-        override val destination = "menu"
-    }
-
+    const val Loading = "loading"
+    const val Authentication = "auth"
+    const val Menu = "menu"
 }
 
 @ExperimentalCoroutinesApi
 @Composable
-fun Nav(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = Destinations.loading.destination) {
-        composable(Destinations.loading.destination) {
-            Loading(
-                viewModel = hiltViewModel<LoadingViewModel>()
+fun Nav() {
+    val navController = rememberNavController()
+
+    NavHost(navController = navController, startDestination = Destinations.Loading) {
+        composable(Destinations.Loading) {
+            LoadingScreen(
+                viewModel = hiltViewModel<LoadingViewModel>(),
+                navController = navController
             )
         }
 
-        composable(Destinations.authentication.destination) {
-            Auth(
+        composable(Destinations.Authentication) {
+            AuthScreen(
                 viewModel = hiltViewModel<AuthViewModel>()
             )
         }
 
-        composable(Destinations.menu.destination) {
-            Menu(
+        composable(Destinations.Menu) {
+            MenuScreen(
                 viewModel = hiltViewModel<MenuViewModel>()
             )
         }
