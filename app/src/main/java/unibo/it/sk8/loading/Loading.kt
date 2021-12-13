@@ -26,24 +26,29 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import kotlinx.coroutines.delay
 import unibo.it.sk8.R
 import unibo.it.sk8.navigation.Destinations
-import unibo.it.sk8.navigation.NavigationManager
 
 private const val SplashWaitTime: Long = 5000
 
 @Composable
-fun Loading(
-    viewModel: LoadingViewModel
+fun LoadingScreen(
+    viewModel: LoadingViewModel,
+    navController: NavHostController
 ) {
     val state by viewModel.uiState.collectAsState()
-    Loading(viewState = state)
+    Loading(
+        viewState = state,
+        navController = navController
+    )
 }
 
 @Composable
 private fun Loading(
-    viewState: UserState
+    viewState: UserState,
+    navController: NavHostController
 ) {
     when (viewState) {
         UserState.Loading -> {
@@ -51,11 +56,17 @@ private fun Loading(
         }
         UserState.Authenticated -> {
             Log.i("OHDI", " AUTHENTICATE")
-            NavigationManager().navigate(Destinations.menu)
+            Navigate(
+                navController = navController,
+                destination = Destinations.Menu
+            )
         }
         UserState.NotAuthenticated -> {
             Log.i("OHDI", "NOT AUTHENTICATE")
-            NavigationManager().navigate(Destinations.authentication)
+            Navigate(
+                navController = navController,
+                destination = Destinations.Authentication
+            )
         }
     }
 }
@@ -120,5 +131,12 @@ fun BottomText() {
             fontWeight = FontWeight.Normal,
             textAlign = TextAlign.Center
         )
+    }
+}
+
+@Composable
+private fun Navigate(navController: NavHostController, destination: String) {
+    LaunchedEffect(Unit) {
+        navController.navigate(destination)
     }
 }

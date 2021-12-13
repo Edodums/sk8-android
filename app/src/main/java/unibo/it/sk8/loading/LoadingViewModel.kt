@@ -20,10 +20,10 @@ class LoadingViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             preferences.getUser().collect {
-                if (it.token.isEmpty()) {
-                    _uiState.value = UserState.NotAuthenticated
-                } else {
+                it?.let {
                     _uiState.value = UserState.Authenticated
+                } ?: run {
+                    _uiState.value = UserState.NotAuthenticated
                 }
             }
         }
