@@ -22,12 +22,12 @@ class Preferences @Inject constructor(
 
     suspend fun saveUser(userData: UserData) {
         context.userDataStore.edit { preferences ->
-            preferences[PreferenceKeys.token] = userData.token
-            preferences[PreferenceKeys.email] = userData.email
+            preferences[PreferenceKeys.token] = userData.token ?: ""
+            preferences[PreferenceKeys.email] = userData.email ?: ""
         }
     }
 
-    fun getUser(): Flow<UserData> = context.userDataStore.data
+    fun getUser(): Flow<UserData?> = context.userDataStore.data
         .catch { exception ->
             if (exception is IOException) {
                 emit(emptyPreferences())
@@ -36,8 +36,12 @@ class Preferences @Inject constructor(
             }
         }
         .map { preferences ->
-            val authToken = preferences[PreferenceKeys.token].toString()
-            val authEmail = preferences[PreferenceKeys.email].toString()
+            val authToken = preferences[PreferenceKeys.token]
+            val authEmail = preferences[PreferenceKeys.email]
+
+            if (authToken.isNullOrEmpty()) {
+                return@map null
+            }
 
             return@map UserData(
                 token = authToken,
