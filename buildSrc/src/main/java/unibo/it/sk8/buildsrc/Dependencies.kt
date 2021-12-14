@@ -43,6 +43,7 @@ object Libs {
             const val uiTest = "androidx.compose.ui:ui-test-junit4:$version"
             const val uiTestManifest = "androidx.compose.ui:ui-test-manifest:$version"
             const val material3 = "androidx.compose.material3:material3:1.0.0-alpha02"
+            const val icons = "androidx.compose.material:material-icons-extended:$version"
             const val navigation_compose = "androidx.navigation:navigation-compose:2.4.0-beta02"
             const val hilt_navigation_compose = "androidx.hilt:hilt-navigation-compose:1.0.0-beta01"
         }

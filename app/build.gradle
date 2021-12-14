@@ -133,6 +133,7 @@ dependencies {
     implementation Libs.AndroidX.Compose.navigation_compose
     implementation Libs.AndroidX.Compose.hilt_navigation_compose
     implementation Libs.AndroidX.Compose.material3
+    implementation Libs.AndroidX.Compose.icons
 
     implementation("androidx.multidex:multidex:2.0.1")
 
