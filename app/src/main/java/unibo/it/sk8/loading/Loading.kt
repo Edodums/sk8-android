@@ -52,17 +52,15 @@ private fun Loading(
 ) {
     when (viewState) {
         UserState.Loading -> {
-            Loading()
+            Loading(navController)
         }
         UserState.Authenticated -> {
-            Log.i("OHDI", " AUTHENTICATE")
             Navigate(
                 navController = navController,
                 destination = Destinations.Menu
             )
         }
         UserState.NotAuthenticated -> {
-            Log.i("OHDI", "NOT AUTHENTICATE")
             Navigate(
                 navController = navController,
                 destination = Destinations.Authentication
@@ -72,10 +70,11 @@ private fun Loading(
 }
 
 @Composable
-private fun Loading() {
-    LaunchedEffect(Unit) {
-        delay(SplashWaitTime)
-    }
+private fun Loading(navController: NavHostController) {
+    Navigate(
+        navController = navController,
+        destination = Destinations.Menu
+    )
 
     Scaffold(
         content = { Content() },
@@ -137,6 +136,7 @@ fun BottomText() {
 @Composable
 private fun Navigate(navController: NavHostController, destination: String) {
     LaunchedEffect(Unit) {
+        delay(SplashWaitTime)
         navController.navigate(destination)
     }
 }
