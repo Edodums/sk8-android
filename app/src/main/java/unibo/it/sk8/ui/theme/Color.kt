@@ -60,3 +60,5 @@ val error = Color(0xFFB3261E)
 
 
 val lunacy_auth_background = Color(0xFF4611A8)
+val outline_OTP_focused = Color(0xFF00FF0A)
+val outline_OTP_unfocused = Color(0xFF443D4F)

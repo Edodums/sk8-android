@@ -3,4 +3,7 @@
     <string name="loading_title">It\'s going \nplaces</string>
     <string name="loading_subtitle">Please wait for the \nsynchronization to complete</string>
     <string name="welcome">Welcome</string>
+    <string name="show_password">Show password</string>
+    <string name="hide_password">Hide password</string>
+    <string name="check_your_email">"Check\n your mail"</string>
 </resources>
