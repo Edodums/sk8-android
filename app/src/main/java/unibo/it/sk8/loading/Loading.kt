@@ -1,6 +1,5 @@
 package unibo.it.sk8.loading
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,7 +13,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -27,11 +25,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import kotlinx.coroutines.delay
+import unibo.it.sk8.ui.common.Navigate
 import unibo.it.sk8.R
 import unibo.it.sk8.navigation.Destinations
-
-private const val SplashWaitTime: Long = 5000
 
 @Composable
 fun LoadingScreen(
@@ -130,13 +126,5 @@ fun BottomText() {
             fontWeight = FontWeight.Normal,
             textAlign = TextAlign.Center
         )
-    }
-}
-
-@Composable
-private fun Navigate(navController: NavHostController, destination: String) {
-    LaunchedEffect(Unit) {
-        delay(SplashWaitTime)
-        navController.navigate(destination)
     }
 }
