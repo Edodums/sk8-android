@@ -34,7 +34,8 @@ fun Nav() {
 
         composable(Destinations.Authentication) {
             AuthScreen(
-                viewModel = hiltViewModel<AuthViewModel>()
+                viewModel = hiltViewModel<AuthViewModel>(),
+                navController = navController
             )
         }
 

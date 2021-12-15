@@ -1,59 +1,86 @@
 package unibo.it.sk8.auth
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
+import androidx.compose.material.TextFieldColors
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import unibo.it.sk8.R
-import unibo.it.sk8.ui.theme.lunacy_auth_background
+import unibo.it.sk8.navigation.Destinations
+import unibo.it.sk8.ui.common.Navigate
 
 @ExperimentalCoroutinesApi
 @Composable
-fun Auth(
-    viewModel: AuthViewModel
+fun AuthScreen(
+    viewModel: AuthViewModel,
+    navController: NavHostController
 ) {
+    val authState by viewModel.authState.collectAsState()
 
     Scaffold(
-        backgroundColor = lunacy_auth_background,
-        topBar = { WhiteLogo() },
+        backgroundColor = MaterialTheme.colorScheme.onPrimary,
+        topBar = { Logo() },
         content = {
-            AuthContent()
+            when (authState) {
+                AuthState.OTP -> OTPScreen(viewModel)
+                AuthState.Sign -> SignScreen(viewModel)
+                AuthState.Verified -> {
+                    Navigate(
+                        navController = navController,
+                        destination = Destinations.Menu
+                    )
+                }
+            }
         }
     )
 }
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @Composable
-fun AuthContent() {
+fun SignScreen(viewModel: AuthViewModel) {
     val columnHorizontalPadding = 48.dp
 
     Column(
@@ -69,36 +96,42 @@ fun AuthContent() {
             style = MaterialTheme.typography.titleMedium
         )
 
-        Form()
+        SignForm(viewModel)
     }
 }
 
 @Composable
-fun WhiteLogo() {
-    val scale = 3f
-    val padding = 64.dp
+fun Logo() {
+    val horizontalPadding = 48.dp
+    val verticalPadding = 64.dp
+    var logo = R.drawable.logo_auth_white
+
+    if (!isSystemInDarkTheme()) {
+        logo = R.drawable.logo
+    }
 
     Image(
-        painter = painterResource(id = R.drawable.logo_auth_white),
+        painter = painterResource(id = logo),
         contentDescription = "Sk8 Logo White",
-        modifier = Modifier
-            .padding(all = padding)
-            .scale(scale)
+        modifier = Modifier.padding(
+            horizontal = horizontalPadding,
+            vertical = verticalPadding
+        )
     )
 }
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @Composable
-fun Form() {
+fun SignForm(viewModel: AuthViewModel) {
     val verticalPadding = 48.dp
     val textFieldColors = TextFieldDefaults.outlinedTextFieldColors(
-        focusedBorderColor = MaterialTheme.colorScheme.onPrimary,
+        focusedBorderColor = MaterialTheme.colorScheme.onPrimaryContainer,
         unfocusedBorderColor = MaterialTheme.colorScheme.primaryContainer,
-        focusedLabelColor = MaterialTheme.colorScheme.onPrimary,
-        unfocusedLabelColor = MaterialTheme.colorScheme.primaryContainer,
+        textColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        leadingIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        trailingIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        disabledTrailingIconColor = MaterialTheme.colorScheme.primaryContainer,
     )
-
-    var email = rememberSaveable { mutableStateOf("") }
-    var password = rememberSaveable { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -107,56 +140,34 @@ fun Form() {
         verticalArrangement = Arrangement.spacedBy(18.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         content = {
-            OutlinedTextField(
-                value = email.value,
-                modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Email,
-                    imeAction = ImeAction.Next
-                ),
-                singleLine = true,
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Filled.Person,
-                        contentDescription = "Person"
-                    )
-                },
-                colors = textFieldColors,
-                label = {
-                    Text(text = "Email")
-                },
-                onValueChange = {
-                    email.value = it
-                }
-            )
+            val focusRequester = remember { FocusRequester() }
+            val emailState = remember { EmailState() }
+            val passwordState = remember { PasswordState() }
 
-            OutlinedTextField(
-                value = password.value,
-                modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Password,
-                    imeAction = ImeAction.Send
-                ),
-                singleLine = true,
-                leadingIcon = {
-                    Icon(imageVector = Icons.Filled.Lock, contentDescription = "Lock")
-                },
-                colors = textFieldColors,
-                label = {
-                    Text(text = "Password")
-                },
-                onValueChange = {
-                    password.value = it
-                }
+            Email(
+                emailState = emailState,
+                onImeAction = { focusRequester.requestFocus() },
+                textFieldColors = textFieldColors
             )
-
+            Password(
+                passwordState = passwordState,
+                textFieldColors = textFieldColors,
+                modifier = Modifier.focusRequester(focusRequester),
+                onImeAction = { viewModel.signIn(emailState.text, passwordState.text) }
+            )
             Spacer(modifier = Modifier.padding(8.dp))
 
             Button(
-                onClick = onclickAuth(email.value, password.value),
-                enabled = buttonIsEnabled(email.value, password.value),
-                modifier = Modifier.fillMaxSize(),
-                colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colorScheme.onPrimary),
+                onClick = {
+                    viewModel.signIn(emailState.text, passwordState.text)
+                },
+                enabled = emailState.isValid && passwordState.isValid,
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = MaterialTheme.colorScheme.onBackground,
+                    disabledBackgroundColor = MaterialTheme.colorScheme.background
+                ),
+                contentPadding = PaddingValues(12.dp),
                 content = {
                     Text(text = "Continue")
                 }
@@ -165,11 +176,104 @@ fun Form() {
     )
 }
 
-private fun buttonIsEnabled(email: String, password: String): Boolean {
-    return email.isNotEmpty() && password.isNotEmpty()
+@Composable
+private fun Email(
+    emailState: TextFieldState = rememberSaveable { EmailState() },
+    textFieldColors: TextFieldColors,
+    imeAction: ImeAction = ImeAction.Next,
+    onImeAction: () -> Unit = {}
+) {
+    OutlinedTextField(
+        value = emailState.text,
+        modifier = Modifier.fillMaxWidth(),
+        isError = emailState.showErrors(),
+        keyboardOptions = KeyboardOptions.Default.copy(imeAction = imeAction),
+        keyboardActions = KeyboardActions(
+            onDone = {
+                onImeAction()
+            }
+        ),
+        singleLine = true,
+        leadingIcon = {
+            Icon(
+                imageVector = Icons.Filled.Person,
+                contentDescription = "Person"
+            )
+        },
+        colors = textFieldColors,
+        label = {
+            Text(text = "Email")
+        },
+        onValueChange = {
+            emailState.text = it
+        }
+    )
 }
 
-fun onclickAuth(email: String, password: String): () -> Unit {
-
-    return {}
+@Composable
+private fun Password(
+    passwordState: TextFieldState,
+    textFieldColors: TextFieldColors,
+    modifier: Modifier = Modifier,
+    imeAction: ImeAction = ImeAction.Done,
+    onImeAction: () -> Unit = {}
+) {
+    val showPassword = rememberSaveable { mutableStateOf(false) }
+    OutlinedTextField(
+        value = passwordState.text,
+        modifier = modifier
+            .fillMaxWidth()
+            .onFocusChanged { focusState ->
+                passwordState.onFocusChange(focusState.isFocused)
+                if (!focusState.isFocused) {
+                    passwordState.enableShowErrors()
+                }
+            },
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Password,
+            imeAction = imeAction
+        ),
+        singleLine = true,
+        leadingIcon = {
+            Icon(
+                imageVector = Icons.Filled.Lock,
+                contentDescription = "Lock"
+            )
+        },
+        trailingIcon = {
+            if (showPassword.value) {
+                IconButton(onClick = { showPassword.value = false }) {
+                    Icon(
+                        imageVector = Icons.Filled.Visibility,
+                        contentDescription = stringResource(id = R.string.hide_password)
+                    )
+                }
+            } else {
+                IconButton(onClick = { showPassword.value = true }) {
+                    Icon(
+                        imageVector = Icons.Filled.VisibilityOff,
+                        contentDescription = stringResource(id = R.string.show_password)
+                    )
+                }
+            }
+        },
+        colors = textFieldColors,
+        label = {
+            Text(text = "Password")
+        },
+        onValueChange = {
+            passwordState.text = it
+            passwordState.enableShowErrors()
+        },
+        visualTransformation = if (showPassword.value) {
+            VisualTransformation.None
+        } else {
+            PasswordVisualTransformation()
+        },
+        keyboardActions = KeyboardActions(
+            onDone = {
+                onImeAction()
+            }
+        )
+    )
 }

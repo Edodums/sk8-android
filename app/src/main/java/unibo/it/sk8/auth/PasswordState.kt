@@ -15,11 +15,11 @@ class ConfirmPasswordState(private val passwordState: PasswordState) : TextField
 }
 
 private fun passwordAndConfirmationValid(password: String, confirmedPassword: String): Boolean {
-    return isPasswordValid(password)
+    return isPasswordValid(password) && password == confirmedPassword
 }
 
 private fun isPasswordValid(password: String): Boolean {
-    return password.trim().length > 3
+    return password.trim().length > 8
 }
 
 @Suppress("UNUSED_PARAMETER")

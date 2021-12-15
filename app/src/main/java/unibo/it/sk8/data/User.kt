@@ -20,8 +20,8 @@ data class User(
 
 @Immutable
 data class UserData(
-    val token: String,
-    val email: String
+    val token: String?,
+    val email: String?
 )
 
 @Dao
