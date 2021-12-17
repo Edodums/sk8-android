@@ -25,9 +25,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import unibo.it.sk8.ui.common.Navigate
 import unibo.it.sk8.R
 import unibo.it.sk8.navigation.Destinations
+import unibo.it.sk8.ui.common.Navigate
 
 @Composable
 fun LoadingScreen(
