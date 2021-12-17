@@ -1,15 +1,17 @@
 package unibo.it.sk8.auth
 
+import com.amplifyframework.core.Amplify as AmplifyBacks
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.amplifyframework.auth.AuthChannelEventName
+import com.amplifyframework.auth.AuthException
 import com.amplifyframework.auth.AuthUserAttributeKey
 import com.amplifyframework.auth.options.AuthSignUpOptions
-import com.amplifyframework.core.Amplify
 import com.amplifyframework.hub.HubChannel
+import com.amplifyframework.kotlin.core.Amplify
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -32,11 +34,11 @@ class AuthViewModel @Inject constructor(
     private val _lastEmail = MutableLiveData<String>()
     private val lastEmail: LiveData<String> = _lastEmail
 
-    private var _otp: MutableList<String> = mutableListOf()
+    private var _otp: MutableList<String> = MutableList(size = Constant.OTP_CHARS) { "" }
     private var otp: String = ""
 
     init {
-        Amplify.Hub.subscribe(HubChannel.AUTH) { event ->
+        AmplifyBacks.Hub.subscribe(HubChannel.AUTH) { event ->
             when (AuthChannelEventName.valueOf(event.name)) {
                 AuthChannelEventName.SIGNED_IN -> {
                     _authState.value = AuthState.Verified
@@ -54,49 +56,59 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    fun verify(code: String) {
-        Amplify.Auth.confirmSignUp(lastEmail.value.toString(), code,
-            { result ->
-                if (result.isSignUpComplete) {
-                    Log.i("AuthQuickstart", "Confirm signUp succeeded")
-                } else {
-                    Log.i("AuthQuickstart", "Confirm sign up not complete")
-                }
-            },
-            { Log.e("AuthQuickstart", "Failed to confirm sign up", it) }
-        )
+    suspend fun verify(code: String) {
+        try {
+            val result = Amplify.Auth.confirmSignUp(lastEmail.value.toString(), code)
+
+            if (result.isSignUpComplete) {
+                _authState.value = AuthState.Verified
+                Log.i("AuthQuickstart", "Signup confirmed")
+            } else {
+                Log.i("AuthQuickstart", "Signup confirmation not yet complete")
+            }
+        } catch (error: AuthException) {
+            Log.e("AuthQuickstart", "Failed to confirm signup", error)
+        }
     }
 
-    fun signIn(email: String, password: String) {
+    suspend fun signIn(email: String, password: String) {
         _lastEmail.value = email
 
-        Amplify.Auth.signIn(email, password,
-            { Log.i("AuthQuickStart", "Sign in succeeded: $it") },
-            {
-                Log.e("AuthQuickStart", "Sign in failed", it)
-                signUp(email, password)
+        try {
+            val result = Amplify.Auth.signIn(email, password)
+            if (result.isSignInComplete) {
+                Log.i("AuthQuickstart", "Sign in succeeded")
+            } else {
+                Log.e("AuthQuickstart", "Sign in not complete")
             }
-        )
+        } catch (error: AuthException.UserNotConfirmedException) {
+            _authState.value = AuthState.OTP
+        } catch (error: AuthException.UserNotFoundException) {
+            signUp(email, password)
+        } catch (error: AuthException) {
+            Log.e("AuthQuickstart", "Sign in failed", error)
+        }
+
     }
 
-    private fun signUp(email: String, password: String) {
+    private suspend fun signUp(email: String, password: String) {
         val options = AuthSignUpOptions.builder()
             .userAttribute(AuthUserAttributeKey.email(), email)
             .build()
 
-        Amplify.Auth.signUp(email, password, options,
-            {
-                Log.i("AuthQuickStart", "Sign up succeeded: $it")
-                _authState.value = AuthState.OTP
-            },
-            { Log.e("AuthQuickStart", "Sign up failed", it) }
-        )
+        try {
+            val result = Amplify.Auth.signUp(email, password, options)
+            _authState.value = AuthState.OTP
+            Log.i("AuthQuickStart", "Result: $result")
+        } catch (error: AuthException) {
+            Log.e("AuthQuickStart", "Sign up failed", error)
+        }
     }
 
     fun addOTPChar(index: Int, text: String) {
-        _otp.add(index, text)
+        _otp[index] = text
 
-        val currentOTP = _otp.filter { it.isEmpty() }.joinToString()
+        val currentOTP = _otp.filter { it.isNotEmpty() }.joinToString(separator = "")
 
         if (currentOTP.length == Constant.OTP_CHARS) {
             _otpStates.value = OTPStates.Success

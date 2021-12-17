@@ -13,8 +13,10 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
 import androidx.compose.material.TextFieldColors
@@ -27,10 +29,12 @@ import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,10 +52,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.launch
 import unibo.it.sk8.R
 import unibo.it.sk8.navigation.Destinations
 import unibo.it.sk8.ui.common.Navigate
 
+@FlowPreview
 @ExperimentalCoroutinesApi
 @Composable
 fun AuthScreen(
@@ -123,6 +130,7 @@ fun Logo() {
 @OptIn(ExperimentalCoroutinesApi::class)
 @Composable
 fun SignForm(viewModel: AuthViewModel) {
+    val coroutineScope = rememberCoroutineScope()
     val verticalPadding = 48.dp
     val textFieldColors = TextFieldDefaults.outlinedTextFieldColors(
         focusedBorderColor = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -149,17 +157,25 @@ fun SignForm(viewModel: AuthViewModel) {
                 onImeAction = { focusRequester.requestFocus() },
                 textFieldColors = textFieldColors
             )
+
             Password(
                 passwordState = passwordState,
                 textFieldColors = textFieldColors,
                 modifier = Modifier.focusRequester(focusRequester),
-                onImeAction = { viewModel.signIn(emailState.text, passwordState.text) }
+                onImeAction = {
+                    coroutineScope.launch {
+                        viewModel.signIn(emailState.text, passwordState.text)
+                    }
+                }
             )
+
             Spacer(modifier = Modifier.padding(8.dp))
 
             Button(
                 onClick = {
-                    viewModel.signIn(emailState.text, passwordState.text)
+                    coroutineScope.launch {
+                        viewModel.signIn(emailState.text, passwordState.text)
+                    }
                 },
                 enabled = emailState.isValid && passwordState.isValid,
                 modifier = Modifier.fillMaxWidth(),
@@ -202,7 +218,12 @@ private fun Email(
         },
         colors = textFieldColors,
         label = {
-            Text(text = "Email")
+            CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+                Text(
+                    text = stringResource(id = R.string.email),
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+            }
         },
         onValueChange = {
             emailState.text = it
@@ -219,6 +240,7 @@ private fun Password(
     onImeAction: () -> Unit = {}
 ) {
     val showPassword = rememberSaveable { mutableStateOf(false) }
+
     OutlinedTextField(
         value = passwordState.text,
         modifier = modifier
@@ -229,7 +251,7 @@ private fun Password(
                     passwordState.enableShowErrors()
                 }
             },
-        keyboardOptions = KeyboardOptions(
+        keyboardOptions = KeyboardOptions.Default.copy(
             keyboardType = KeyboardType.Password,
             imeAction = imeAction
         ),
@@ -259,7 +281,12 @@ private fun Password(
         },
         colors = textFieldColors,
         label = {
-            Text(text = "Password")
+            CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+                Text(
+                    text = stringResource(id = R.string.password),
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+            }
         },
         onValueChange = {
             passwordState.text = it
