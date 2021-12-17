@@ -85,6 +85,7 @@ android {
 dependencies {
     implementation Libs.Kotlin.stdlib
     implementation Libs.Kotlin.Coroutines.android
+    implementation Libs.Amplify.aws_core_kotlin
 
     implementation Libs.AndroidX.Activity.activityCompose
     implementation Libs.AndroidX.appcompat

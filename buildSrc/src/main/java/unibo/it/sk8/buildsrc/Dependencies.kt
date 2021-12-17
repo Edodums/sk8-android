@@ -106,6 +106,7 @@ object Libs {
         private const val version = "1.31.0"
         const val aws_auth_cognito = "com.amplifyframework:aws-auth-cognito:$version"
         const val aws_datastore = "com.amplifyframework:aws-datastore:$version"
+        const val aws_core_kotlin = "com.amplifyframework:core-kotlin:0.15.0"
     }
 
     object Mockito {
