@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import unibo.it.sk8.auth.AuthScreen
 import unibo.it.sk8.auth.AuthViewModel
 import unibo.it.sk8.loading.LoadingScreen
@@ -19,6 +20,7 @@ object Destinations {
     const val Menu = "menu"
 }
 
+@OptIn(FlowPreview::class)
 @ExperimentalCoroutinesApi
 @Composable
 fun Nav() {
@@ -41,7 +43,8 @@ fun Nav() {
 
         composable(Destinations.Menu) {
             MenuScreen(
-                viewModel = hiltViewModel<MenuViewModel>()
+                viewModel = hiltViewModel<MenuViewModel>(),
+                navController = navController
             )
         }
     }
