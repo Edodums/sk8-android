@@ -27,6 +27,7 @@ object Libs {
             const val activityCompose = "androidx.activity:activity-compose:1.4.0"
         }
 
+        const val multidex = "androidx.multidex:multidex:2.0.1"
         const val appcompat = "androidx.appcompat:appcompat:1.3.0"
 
         object Compose {
@@ -107,6 +108,10 @@ object Libs {
         const val aws_auth_cognito = "com.amplifyframework:aws-auth-cognito:$version"
         const val aws_datastore = "com.amplifyframework:aws-datastore:$version"
         const val aws_core_kotlin = "com.amplifyframework:core-kotlin:0.15.0"
+    }
+
+    object Reflections {
+        const val reflection = "org.jetbrains.kotlin:kotlin-reflect:1.5.31"
     }
 
     object Mockito {
