@@ -120,7 +120,8 @@ fun OTPLine(viewModel: AuthViewModel) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         val focusRequesters = List(Constant.OTP_CHARS) { FocusRequester() }
-        val otpChars = List(Constant.OTP_CHARS) { index ->
+
+        List(Constant.OTP_CHARS) { index ->
             var nextFocusRequester: FocusRequester? = null
 
             if (index < Constant.OTP_CHARS - 1) {

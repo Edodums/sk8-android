@@ -62,7 +62,7 @@ class AuthViewModel @Inject constructor(
 
             if (result.isSignUpComplete) {
                 _authState.value = AuthState.Verified
-                Log.i("AuthQuickstart", "Signup confirmed")
+                Log.i("AuthQuickstart", "Signup confirmed: $result")
             } else {
                 Log.i("AuthQuickstart", "Signup confirmation not yet complete")
             }
