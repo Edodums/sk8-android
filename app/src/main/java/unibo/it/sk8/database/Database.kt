@@ -5,20 +5,20 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import unibo.it.sk8.data.User
-import unibo.it.sk8.data.UserDao
+import unibo.it.sk8.data.Setting
+import unibo.it.sk8.data.SettingDao
 
 
 @Database(
     entities = [
-        User::class
+        Setting::class
     ],
     version = 1, exportSchema = false
 )
 @TypeConverters()
 abstract class AppDatabase : RoomDatabase() {
 
-    abstract fun getUserDao(): UserDao
+    abstract fun getSettingDao(): SettingDao
 
     companion object {
         @Volatile
@@ -29,7 +29,6 @@ abstract class AppDatabase : RoomDatabase() {
                 instance ?: buildDatabase(context).also { instance = it }
             }
         }
-
 
         private fun buildDatabase(context: Context): AppDatabase {
 
