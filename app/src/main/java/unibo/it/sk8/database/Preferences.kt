@@ -5,29 +5,28 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
-import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.IOException
-import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
-import unibo.it.sk8.data.UserData
 
-class Preferences @Inject constructor(
-    @ApplicationContext val context: Context
-) {
-    private val Context.userDataStore: DataStore<Preferences> by preferencesDataStore(name = TABLE_NAME)
+abstract class CommonPreferences constructor(@ApplicationContext open val context: Context) {
+    protected abstract val Context.store: DataStore<Preferences>
+    protected abstract val preferenceKeys: PreferenceKeys
 
-    suspend fun saveUser(userData: UserData) {
-        context.userDataStore.edit { preferences ->
-            preferences[PreferenceKeys.token] = userData.token ?: ""
-            preferences[PreferenceKeys.email] = userData.email ?: ""
+    suspend fun save(data: Data) {
+        context.store.edit { preferences ->
+            preferenceKeys.keys.map {
+                val key = it.value as Preferences.Key<Any>
+                val value = data.getValue(key = it.key)
+
+                preferences[key] = value
+            }
         }
     }
 
-    fun getUser(): Flow<UserData?> = context.userDataStore.data
+    fun get(): Flow<Data?> = context.store.data
         .catch { exception ->
             if (exception is IOException) {
                 emit(emptyPreferences())
@@ -36,27 +35,22 @@ class Preferences @Inject constructor(
             }
         }
         .map { preferences ->
-            val authToken = preferences[PreferenceKeys.token]
-            val authEmail = preferences[PreferenceKeys.email]
-
-            if (authToken.isNullOrEmpty()) {
-                return@map null
-            }
-
-            return@map UserData(
-                token = authToken,
-                email = authEmail
-            )
+            Data(preferenceKeys.keys.map {
+                val key = it.value as Preferences.Key<*>
+                preferences[key]
+            })
         }
+}
 
-    private object PreferenceKeys {
-        val token = stringPreferencesKey(TOKEN)
-        val email = stringPreferencesKey(EMAIL)
-    }
-
-    companion object {
-        private const val TABLE_NAME = "user"
-        private const val TOKEN = "token"
-        private const val EMAIL = "email"
+open class Data(vararg data: Any) {
+    fun getValue(key: String): Any {
+        return this::class.members.map {
+            if (it.name == key) {
+                return@map it.call(this)
+            }
+            return@map null
+        }.filterNotNull()[0]
     }
 }
+
+class PreferenceKeys(val keys: MutableMap<String, Any>)
