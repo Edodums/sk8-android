@@ -11,6 +11,8 @@ import unibo.it.sk8.auth.AuthScreen
 import unibo.it.sk8.auth.AuthViewModel
 import unibo.it.sk8.loading.LoadingScreen
 import unibo.it.sk8.loading.LoadingViewModel
+import unibo.it.sk8.lookup.LookupScreen
+import unibo.it.sk8.lookup.LookupViewModel
 import unibo.it.sk8.menu.MenuScreen
 import unibo.it.sk8.menu.MenuViewModel
 
@@ -18,6 +20,7 @@ object Destinations {
     const val Loading = "loading"
     const val Authentication = "auth"
     const val Menu = "menu"
+    const val Lookup = "lookup"
 }
 
 @OptIn(FlowPreview::class)
@@ -44,6 +47,13 @@ fun Nav() {
         composable(Destinations.Menu) {
             MenuScreen(
                 viewModel = hiltViewModel<MenuViewModel>(),
+                navController = navController
+            )
+        }
+
+        composable(Destinations.Lookup) {
+            LookupScreen(
+                viewModel = hiltViewModel<LookupViewModel>(),
                 navController = navController
             )
         }

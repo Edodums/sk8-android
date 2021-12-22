@@ -1,7 +1,5 @@
 package unibo.it.sk8.auth
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -42,7 +40,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -56,6 +53,7 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.launch
 import unibo.it.sk8.R
 import unibo.it.sk8.navigation.Destinations
+import unibo.it.sk8.ui.common.AuthLogo
 import unibo.it.sk8.ui.common.Navigate
 
 @FlowPreview
@@ -69,7 +67,7 @@ fun AuthScreen(
 
     Scaffold(
         backgroundColor = MaterialTheme.colorScheme.onPrimary,
-        topBar = { Logo() },
+        topBar = { AuthLogo() },
         content = {
             when (authState) {
                 AuthState.OTP -> OTPScreen(viewModel)
@@ -105,26 +103,6 @@ fun SignScreen(viewModel: AuthViewModel) {
 
         SignForm(viewModel)
     }
-}
-
-@Composable
-fun Logo() {
-    val horizontalPadding = 48.dp
-    val verticalPadding = 64.dp
-    var logo = R.drawable.logo_auth_white
-
-    if (!isSystemInDarkTheme()) {
-        logo = R.drawable.logo
-    }
-
-    Image(
-        painter = painterResource(id = logo),
-        contentDescription = "Sk8 Logo White",
-        modifier = Modifier.padding(
-            horizontal = horizontalPadding,
-            vertical = verticalPadding
-        )
-    )
 }
 
 @OptIn(ExperimentalCoroutinesApi::class)

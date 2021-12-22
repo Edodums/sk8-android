@@ -1,6 +1,5 @@
 package unibo.it.sk8.menu
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -25,9 +24,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -38,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import unibo.it.sk8.R
+import unibo.it.sk8.ui.common.BasicLogo
 import unibo.it.sk8.ui.theme.start_skatin_container
 import unibo.it.sk8.ui.theme.start_skatin_content
 
@@ -50,7 +48,7 @@ fun MenuScreen(
 
     Scaffold(
         backgroundColor = MaterialTheme.colorScheme.onPrimaryContainer,
-        topBar = { Logo() },
+        topBar = { BasicLogo() },
         content = {
             when (menuState) {
                 MenuState.NotPaired -> NotPairedScreen(viewModel, navController)
@@ -70,7 +68,7 @@ fun StartScreen(viewModel: MenuViewModel, navController: NavHostController) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         val width = 300.dp
-        val shape = GenericShape  { it,_ ->
+        val shape = GenericShape { it, _ ->
             val w = it.width
             val h = it.height
             relativeMoveTo(0f, 0f)
@@ -163,17 +161,4 @@ fun NotPairedScreen(viewModel: MenuViewModel, navController: NavHostController) 
             }
         )
     }
-}
-
-@Composable
-fun Logo() {
-    Image(
-        painter = painterResource(id = R.drawable.logo),
-        contentDescription = "Sk8 Logo icon",
-        modifier = Modifier
-            .padding(
-                all = 32.dp
-            )
-            .scale(0.8f)
-    )
 }

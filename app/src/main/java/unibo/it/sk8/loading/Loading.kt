@@ -1,6 +1,5 @@
 package unibo.it.sk8.loading
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,8 +16,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -27,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import unibo.it.sk8.R
 import unibo.it.sk8.navigation.Destinations
+import unibo.it.sk8.ui.common.LoadingLogo
 import unibo.it.sk8.ui.common.Navigate
 
 @Composable
@@ -88,16 +86,8 @@ fun Content() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        val scale = 2f
-
-        Image(
-            painter = painterResource(id = R.drawable.logo),
-            contentDescription = "Sk8 Logo",
-            modifier = Modifier.scale(scale)
-        )
-
+        LoadingLogo()
         Spacer(modifier = Modifier.padding(padding))
-
         Text(
             text = stringResource(id = R.string.loading_title),
             style = MaterialTheme.typography.h1,
