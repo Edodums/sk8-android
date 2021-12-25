@@ -125,6 +125,10 @@ object Libs {
     object Gsm {
         const val gsm = "4.3.10"
     }
+
+    object Shimmer {
+        const val shimmer = "com.valentinilk.shimmer:compose-shimmer:1.0.2"
+    }
 }
 
 object Urls {
