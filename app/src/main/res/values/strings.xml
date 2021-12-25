@@ -15,5 +15,9 @@
     <string name="are_you_ready">Are you\nready?</string>
     <string name="click_circle_description">Click the circle\nbutton in the\ncenter\n⬇️</string>
     <string name="looking_for">Just wait a little\nand let me handle\nthe lookup\n🤠</string>
+    <string name="this_ones">This are the ones\nI\'ve found\n🎯 </string>
+    <string name="scan_again">Scan Again →</string>
+    <string name="dummy_device_1">Device 1</string>
+    <string name="add_device">Add Device</string>
 </resources>
 
