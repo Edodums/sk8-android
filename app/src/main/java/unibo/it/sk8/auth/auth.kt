@@ -163,7 +163,7 @@ fun SignForm(viewModel: AuthViewModel) {
                 ),
                 contentPadding = PaddingValues(12.dp),
                 content = {
-                    Text(text = "Continue")
+                    Text(text = stringResource(id = R.string.continue_))
                 }
             )
         }
