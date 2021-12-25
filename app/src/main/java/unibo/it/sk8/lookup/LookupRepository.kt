@@ -1,8 +1,9 @@
 package unibo.it.sk8.lookup
 
+import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class LookupRepository {
+class LookupRepository @Inject constructor() {
 
 }

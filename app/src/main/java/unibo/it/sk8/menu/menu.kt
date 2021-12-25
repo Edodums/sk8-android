@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import unibo.it.sk8.R
+import unibo.it.sk8.navigation.Destinations
 import unibo.it.sk8.ui.common.BasicLogo
 import unibo.it.sk8.ui.theme.start_skatin_container
 import unibo.it.sk8.ui.theme.start_skatin_content
@@ -144,7 +145,9 @@ fun NotPairedScreen(viewModel: MenuViewModel, navController: NavHostController) 
         )
         Spacer(modifier = Modifier.padding(all = 32.dp))
         Button(
-            onClick = { /*TODO*/ },
+            onClick = {
+                navController.navigate(Destinations.Lookup)
+            },
             modifier = Modifier.width(300.dp),
             enabled = true,
             colors = ButtonDefaults.buttonColors(

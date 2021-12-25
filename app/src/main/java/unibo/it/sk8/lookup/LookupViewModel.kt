@@ -12,7 +12,7 @@ class LookupViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val repository: LookupRepository
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow<LookupState>(LookupState.Action)
+    private val _uiState = MutableStateFlow<LookupState>(LookupState.Loading)
     val uiState: StateFlow<LookupState> = _uiState
 
 
