@@ -21,5 +21,6 @@
     <string name="check">✔️</string>
     <string name="continue_">Continue</string>
     <string name="add_device">Add Device</string>
+    <string name="controls_text">Slide Up or Down\nto control it</string>
 </resources>
 

@@ -8,19 +8,17 @@ import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import unibo.it.sk8.auth.AuthScreen
-import unibo.it.sk8.auth.AuthViewModel
+import unibo.it.sk8.controls.ControlsScreen
 import unibo.it.sk8.loading.LoadingScreen
-import unibo.it.sk8.loading.LoadingViewModel
 import unibo.it.sk8.lookup.LookupScreen
-import unibo.it.sk8.lookup.LookupViewModel
 import unibo.it.sk8.menu.MenuScreen
-import unibo.it.sk8.menu.MenuViewModel
 
 object Destinations {
     const val Loading = "loading"
     const val Authentication = "auth"
     const val Menu = "menu"
     const val Lookup = "lookup"
+    const val Controls = "controls"
 }
 
 @OptIn(FlowPreview::class)
@@ -32,28 +30,35 @@ fun Nav() {
     NavHost(navController = navController, startDestination = Destinations.Loading) {
         composable(Destinations.Loading) {
             LoadingScreen(
-                viewModel = hiltViewModel<LoadingViewModel>(),
+                viewModel = hiltViewModel(),
                 navController = navController
             )
         }
 
         composable(Destinations.Authentication) {
             AuthScreen(
-                viewModel = hiltViewModel<AuthViewModel>(),
+                viewModel = hiltViewModel(),
                 navController = navController
             )
         }
 
         composable(Destinations.Menu) {
             MenuScreen(
-                viewModel = hiltViewModel<MenuViewModel>(),
+                viewModel = hiltViewModel(),
                 navController = navController
             )
         }
 
         composable(Destinations.Lookup) {
             LookupScreen(
-                viewModel = hiltViewModel<LookupViewModel>(),
+                viewModel = hiltViewModel(),
+                navController = navController
+            )
+        }
+
+        composable(Destinations.Controls) {
+            ControlsScreen(
+                viewModel = hiltViewModel(),
                 navController = navController
             )
         }
