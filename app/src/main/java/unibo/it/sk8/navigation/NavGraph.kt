@@ -1,17 +1,55 @@
 package unibo.it.sk8.navigation
 
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
-import unibo.it.sk8.auth.AuthScreen
-import unibo.it.sk8.controls.ControlsScreen
-import unibo.it.sk8.loading.LoadingScreen
-import unibo.it.sk8.lookup.LookupScreen
-import unibo.it.sk8.menu.MenuScreen
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavHostController
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.composable
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import unibo.it.sk8.presentation.LoadingScreen
+
+
+/**
+ * https://github.com/igorescodro/alkaa/blob/main/app/src/main/java/com/escodro/alkaa/navigation/NavGraph.kt
+ */
+@OptIn(ExperimentalAnimationApi::class)
+@Composable
+fun Nav(startDestination: String = Destinations.Loading) {
+    val navController = rememberAnimatedNavController()
+    val context = LocalContext.current
+
+    val actions = remember(navController) {
+        Actions(navController = navController)
+    }
+
+    AnimatedNavHost(navController = navController, startDestination = startDestination) {
+
+        composable(route = Destinations.Loading, enterTransition = { _, _ ->
+            slideIntoContainer(
+                AnimatedContentScope.SlideDirection.Right,
+                animationSpec = tween(Constants.TWEEN_DURATION)
+            )
+        }) {
+            /*LoadingScreen(viewModel = , navController = )*/
+        }
+    }
+
+}
+
+internal data class Actions(val navController: NavHostController) {
+    val openLoading: () -> Unit = {
+        navController.navigate(Destinations.Loading)
+    }
+}
+
+
+private object Constants {
+    const val TWEEN_DURATION = 700
+}
 
 object Destinations {
     const val Loading = "loading"
@@ -19,48 +57,4 @@ object Destinations {
     const val Menu = "menu"
     const val Lookup = "lookup"
     const val Controls = "controls"
-}
-
-@OptIn(FlowPreview::class)
-@ExperimentalCoroutinesApi
-@Composable
-fun Nav() {
-    val navController = rememberNavController()
-
-    NavHost(navController = navController, startDestination = Destinations.Loading) {
-        composable(Destinations.Loading) {
-            LoadingScreen(
-                viewModel = hiltViewModel(),
-                navController = navController
-            )
-        }
-
-        composable(Destinations.Authentication) {
-            AuthScreen(
-                viewModel = hiltViewModel(),
-                navController = navController
-            )
-        }
-
-        composable(Destinations.Menu) {
-            MenuScreen(
-                viewModel = hiltViewModel(),
-                navController = navController
-            )
-        }
-
-        composable(Destinations.Lookup) {
-            LookupScreen(
-                viewModel = hiltViewModel(),
-                navController = navController
-            )
-        }
-
-        composable(Destinations.Controls) {
-            ControlsScreen(
-                viewModel = hiltViewModel(),
-                navController = navController
-            )
-        }
-    }
 }
