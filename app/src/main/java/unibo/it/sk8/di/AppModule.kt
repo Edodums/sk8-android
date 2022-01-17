@@ -1,7 +1,9 @@
 package unibo.it.sk8.di
 
-import org.koin.dsl.module
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 
-
-val appModule = module {}
-
+@Module
+@InstallIn(SingletonComponent::class)
+class AppModule

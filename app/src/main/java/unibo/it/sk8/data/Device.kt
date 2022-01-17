@@ -1,4 +1,3 @@
-/*
 package unibo.it.sk8.data
 
 import androidx.compose.runtime.Immutable
@@ -9,4 +8,3 @@ data class DeviceData(
     val token: String?,
     val name: String?
 ) : Data()
-*/
