@@ -21,26 +21,11 @@ repositories {
 }
 
 plugins {
-    `java-gradle-plugin`
     `kotlin-dsl`
-    `kotlin-dsl-precompiled-script-plugins`
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-}
-
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    kotlinOptions {
-        allWarningsAsErrors = false
-        freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn", "-Xopt-in=kotlin.Experimental")
-        jvmTarget = "1.8"
-    }
 }
 
 dependencies {
-    implementation("com.android.tools.build:gradle:7.0.4")
+    implementation("com.android.tools.build:gradle:7.2.0-alpha06")
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10")
     implementation("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.19.0")
 }

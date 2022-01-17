@@ -35,9 +35,4 @@ class SK8 : Application() {
             )
         }
     }
-
-    override fun attachBaseContext(base: Context?) {
-        super.attachBaseContext(base)
-        SplitCompat.install(this)
-    }
 }

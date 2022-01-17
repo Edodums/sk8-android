@@ -3,13 +3,21 @@ object Releases {
     const val versionName = "1.0"
 }
 
+object Plugin {
+    const val KOTLIN_ANDROID = "kotlin-android"
+    const val ANDROID_APPLICATION = "com.android.application"
+    const val ANDROID_LIBRARY = "com.android.library"
+    const val KAPT = "kotlin-kapt"
+}
+
 object Versions {
-    const val kotlin = "1.6.10"
+    const val kotlin = "1.5.30"
 
     const val compileSdk = 31
     const val targetSdk = 31
     const val minSdk = 21
 
+    const val composeMaterial = "1.0.5"
     const val material = "1.3.0"
     const val constraint = "2.0.4"
     const val ktx = "1.0.2"
@@ -100,6 +108,7 @@ object Koin {
 }
 
 object Compose {
+    const val material= "androidx.compose.material:material:${Versions.composeMaterial}"
     const val ui = "androidx.compose.ui:ui:${Versions.compose}"
     const val material3 = "androidx.compose.material3:material3:${Versions.material3}"
     const val tooling = "androidx.compose.ui:ui-tooling:${Versions.compose}"

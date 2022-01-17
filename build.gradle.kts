@@ -7,18 +7,6 @@ allprojects {
     }
 }
 
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath(androidGradlePlugin)
-        classpath(Kotlin.gradlePlugin)
-    }
-}
-
 tasks.register("clean") {
     delete(rootProject.buildDir)
 }

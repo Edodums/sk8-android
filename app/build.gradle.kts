@@ -1,22 +1,18 @@
-import extensions.addComposeConfig
-import extensions.addComposeDependencies
-
 plugins {
-    id(GradlePlugin.ANDROID_APPLICATION)
-    id(GradlePlugin.KOTLIN_ANDROID)
-    id(GradlePlugin.KOTLIN_QUALITY)
+    id(Plugin.ANDROID_APPLICATION)
+    id(Plugin.KOTLIN_ANDROID)
 }
 
 
 android {
     defaultConfig {
         applicationId = "unibo.it.sk8"
+        versionCode = Releases.versionCode
+        versionName = Releases.versionName
+
         compileSdk = Versions.compileSdk
         minSdk = Versions.minSdk
         targetSdk = Versions.targetSdk
-        versionCode = Releases.versionCode
-        versionName = Releases.versionName
-        vectorDrawables.useSupportLibrary = true
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -54,10 +50,14 @@ android {
 
 dependencies {
     implementation(projects.libraries.core)
+    implementation(projects.libraries.test)
+
     implementation(projects.data.local)
     implementation(projects.data.datastore)
     implementation(projects.data.repository)
+
     implementation(projects.domain)
+
     implementation(projects.features.auth)
 
     implementation(Deps.logcat)
@@ -67,9 +67,7 @@ dependencies {
     implementation(Deps.koin.android)
     implementation(Amplify.aws_core_kotlin)
     implementation(Amplify.aws_auth_cognito)
-    implementation("androidx.compose.material:material:1.0.5")
+    implementation(Deps.compose.material)
 
     addComposeDependencies()
 }
-
-/*apply plugin: 'com.google.gms.google-services'*/
