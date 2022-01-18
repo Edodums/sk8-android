@@ -1,0 +1,87 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
+
+android {
+  compileSdkVersion Versions.compileSdk
+
+  defaultConfig {
+    applicationId "unibo.it.sk8"
+    versionCode Releases.versionCode
+    versionName Releases.versionName
+    minSdkVersion Versions.minSdk
+    targetSdkVersion Versions.targetSdk
+    vectorDrawables.useSupportLibrary = true
+    multiDexEnabled true
+    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+  }
+
+  buildTypes {
+    release {
+      minifyEnabled true
+      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+    }
+  }
+
+  buildFeatures {
+    compose true
+
+    // Disable unused AGP features
+    buildConfig false
+    aidl false
+    renderScript false
+    resValues false
+    shaders false
+  }
+
+  composeOptions {
+    kotlinCompilerExtensionVersion '1.1.0-rc02' // For Kotlin 1.6.10. Revert with rc03
+  }
+
+  packagingOptions {
+    // Multiple dependency bring these files in. Exclude them to enable
+    // our test APK to build (has no effect on our AARs)
+    excludes += "/META-INF/AL2.0"
+    excludes += "/META-INF/LGPL2.1"
+  }
+
+
+  /*lint {
+      warningsAsErrors  true
+      abortOnError  true
+      htmlReport  true
+      checkDependencies  true
+
+      lintConfig = file("${rootDir}/config/filters/lint.xml")
+      htmlOutput = file("${buildDir}/reports/lint.html")
+  }*/
+
+  compileOptions {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+  }
+}
+
+dependencies {
+  /*
+  implementation(project(":libraries:test"))
+
+  implementation(project(":data:local"))
+  implementation(project(":data:datastore"))
+  implementation(project(":data:repository"))
+
+  implementation(project(":domain"))
+
+  implementation(project(":features:auth"))*/
+
+  implementation Deps.logcat
+  implementation Deps.compose.navigation
+  implementation Deps.compose.activity
+  implementation Deps.accompanist.animation
+  implementation Deps.koin.android
+  implementation Amplify.aws_core_kotlin
+  implementation Amplify.aws_auth_cognito
+  implementation Deps.compose.material
+
+}

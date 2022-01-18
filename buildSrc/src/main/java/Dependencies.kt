@@ -3,13 +3,6 @@ object Releases {
     const val versionName = "1.0"
 }
 
-object Plugin {
-    const val KOTLIN_ANDROID = "kotlin-android"
-    const val ANDROID_APPLICATION = "com.android.application"
-    const val ANDROID_LIBRARY = "com.android.library"
-    const val KAPT = "kotlin-kapt"
-}
-
 object Versions {
     const val kotlin = "1.5.30"
 
@@ -19,7 +12,6 @@ object Versions {
 
     const val composeMaterial = "1.0.5"
     const val material = "1.3.0"
-    const val constraint = "2.0.4"
     const val ktx = "1.0.2"
     const val room = "2.3.0"
     const val dataStore = "1.0.0"
@@ -59,23 +51,26 @@ object Versions {
     const val logcat = "0.1"
 }
 
-const val androidGradlePlugin = "com.android.tools.build:gradle:${Versions.androidGradle}"
+object Tools {
+    const val androidGradlePlugin = "com.android.tools.build:gradle:${Versions.androidGradle}"
+}
+
 const val detekt = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:${Versions.bosch}"
 
 object Deps {
     const val logging = "io.github.microutils:kotlin-logging:${Versions.logging}"
     const val logback = "ch.qos.logback:logback-classic:${Versions.logback}"
     const val logcat = "com.squareup.logcat:logcat:${Versions.logcat}"
-    val android = Android
+    val android = AndroidDeps
     val coroutines = Coroutines
     val koin = Koin
     val compose = Compose
     val accompanist = Accompanist
-    val test = Test
+    val test = TestDeos
     val quality = Quality
 }
 
-object Android {
+object AndroidDeps {
     const val material = "com.google.android.material:material:${Versions.material}"
     const val ktx = "androidx.core:core-ktx:${Versions.ktx}"
     const val playCore = "com.google.android.play:core:${Versions.playCore}"
@@ -88,7 +83,7 @@ object Accompanist {
         "com.google.accompanist:accompanist-navigation-animation:${Versions.accompanist}"
 }
 
-object Kotlin {
+object KotlinDeps {
     const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${Versions.kotlin}"
     const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
     const val extensions = "org.jetbrains.kotlin:kotlin-android-extensions:${Versions.kotlin}"
@@ -121,7 +116,7 @@ object Compose {
     const val manifest = "androidx.compose.ui:ui-test-manifest:${Versions.compose}"
 }
 
-object Test {
+object TestDeos {
     const val junit = "junit:junit:${Versions.testJunit}"
     const val runner = "androidx.test:runner:${Versions.testRunner}"
     const val core = "androidx.test:core:${Versions.testCore}"

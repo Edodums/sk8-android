@@ -1,0 +1,18 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+dependencies {
+    implementation(project(":features:auth-api"))
+    implementation(project(":domain"))
+
+    implementation Deps.android.ktx
+    implementation Deps.android.material
+    implementation Deps.coroutines.core
+    implementation Deps.koin.android
+    implementation Deps.koin.compose
+    implementation Amplify.aws_auth_cognito
+    implementation Amplify.aws_core_kotlin
+
+    testImplementation(project(":libraries:test"))
+    androidTestImplementation(project(":libraries:test"))
+}

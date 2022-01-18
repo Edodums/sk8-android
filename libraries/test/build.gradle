@@ -1,0 +1,32 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+android {
+    packagingOptions {
+        // Multiple dependency bring these files in. Exclude them to enable
+        // our test APK to build (has no effect on our AARs)
+        excludes += "/META-INF/AL2.0"
+        excludes += "/META-INF/LGPL2.1"
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+        useIR = true
+    }
+}
+
+dependencies {
+    api Deps.test.junit
+    api Deps.coroutines.test
+
+    implementation(Deps.compose.uiTest) {
+        exclude group: "androidx", module: "core-ktx"
+        exclude group: "androidx.fragment", module: "fragment"
+        exclude group: "androidx.customview", module: "customview"
+        exclude group: "androidx.activity", module: "activity"
+        exclude group: "androidx.lifecycle", module: "lifecycle-runtime"
+    }
+
+    implementation Deps.test.core
+    implementation Deps.test.uiAutomator
+}

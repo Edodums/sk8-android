@@ -1,0 +1,60 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion Versions.compileSdk
+
+    defaultConfig {
+        versionCode Releases.versionCode
+        versionName Releases.versionName
+        minSdkVersion Versions.minSdk
+        targetSdkVersion Versions.targetSdk
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += ["room.schemaLocation" : "$projectDir/schemas".toString()]
+                arguments += ["room.incremental" : "true"]
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    sourceSets {
+        androidTest {
+            assets.srcDirs("$projectDir/schemas")
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation KotlinDeps.stdlib
+    implementation AndroidDeps.ktx
+    
+    implementation(project(":data:repository"))
+
+    implementation Deps.koin.android
+    implementation Deps.android.room.room_runtime
+    implementation Deps.android.room.room_ktx
+    kapt Deps.android.room.room_compiler
+
+    androidTestImplementation Deps.test.runner
+    androidTestImplementation Deps.test.room
+
+    testImplementation Deps.test.junit
+    testImplementation Deps.test.mockk
+    testImplementation Deps.coroutines.test
+}
