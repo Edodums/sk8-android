@@ -4,9 +4,8 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
-import unibo.it.sk8.data.Setting
-import unibo.it.sk8.data.SettingDao
+import unibo.it.local.dao.Setting
+import unibo.it.local.dao.SettingDao
 
 
 @Database(

@@ -1,7 +1,12 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
+
 dependencies{
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation KotlinDeps.stdlib
+    implementation AndroidDeps.ktx
+
     implementation(project(":data:repository"))
 
     implementation Deps.koin.android

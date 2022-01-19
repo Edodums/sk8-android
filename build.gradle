@@ -1,4 +1,4 @@
-
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
     repositories {
@@ -15,6 +15,7 @@ plugins {
     id 'com.diffplug.spotless' version '6.0.0'
 }
 
+def composableModules = ['app', 'auth', 'loading']
 
 subprojects {
     repositories {
@@ -33,7 +34,7 @@ subprojects {
         }
     }
 
-    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+    tasks.withType(KotlinCompile).configureEach {
         kotlinOptions {
             // Treat all Kotlin warnings as errors (disabled by default)
             allWarningsAsErrors = project.hasProperty("warningsAsErrors") ? project.warningsAsErrors : false
@@ -49,6 +50,113 @@ subprojects {
     configurations.configureEach {
         resolutionStrategy {
             force Deps.test.junit
+        }
+    }
+
+    // to avoid all the repetitions you can use this "subprojcts.afterEvaluate"
+    afterEvaluate { project ->
+        if (project.hasProperty("android")) {
+            android {
+                defaultConfig {
+                    compileSdk Versions.compileSdk
+                    versionCode Releases.versionCode
+                    versionName Releases.versionName
+                    minSdkVersion Versions.minSdk
+                    targetSdkVersion Versions.targetSdk
+                    vectorDrawables.useSupportLibrary = true
+                    multiDexEnabled true
+                    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+                }
+
+                buildTypes {
+                    release {
+                        minifyEnabled true
+                        proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+                    }
+                }
+
+                sourceSets {
+                    main.java.srcDirs += 'src/main/kotlin'
+                    test.java.srcDirs += 'src/test/kotlin'
+                }
+
+                compileOptions {
+                    sourceCompatibility = JavaVersion.VERSION_1_8
+                    targetCompatibility = JavaVersion.VERSION_1_8
+                }
+
+                packagingOptions {
+                    // Multiple dependency bring these files in. Exclude them to enable
+                    // our test APK to build (has no effect on our AARs)
+                    excludes += "/META-INF/AL2.0"
+                    excludes += "/META-INF/LGPL2.1"
+                }
+
+                kotlinOptions {
+                    jvmTarget = "1.8"
+                    useIR = true
+                }
+
+
+                if (composableModules.contains(name.toLowerCase())) {
+                    buildFeatures {
+                        compose true
+
+                        // Disable unused AGP features
+                        buildConfig false
+                        aidl false
+                        renderScript false
+                        resValues false
+                        shaders false
+                    }
+
+                    composeOptions {
+                        kotlinCompilerExtensionVersion '1.1.0-rc02' // For Kotlin 1.6.10. Revert with rc03
+                    }
+                }
+            }
+
+            dependencies {
+                implementation fileTree(include: ['*.jar'], dir: 'libs')
+                implementation KotlinDeps.stdlib
+                implementation AndroidDeps.ktx
+                implementation Deps.koin.android
+            }
+
+            if (composableModules.contains(name.toLowerCase())) {
+                dependencies {
+                    implementation AndroidDeps.appCompat
+                    implementation Deps.compose.ui
+                    implementation Deps.compose.activity
+                    implementation Deps.compose.navigation
+                    implementation Deps.compose.runtime
+                    implementation Deps.compose.runtimeLivedata
+                    implementation Deps.compose.foundation
+                    implementation Deps.compose.material
+                    implementation Deps.compose.material3
+                    implementation Deps.compose.layout
+                    implementation Deps.compose.animation
+                    implementation Deps.compose.tooling
+                    implementation Deps.compose.viewModel
+
+                    androidTestImplementation(Deps.compose.uiTest) {
+                        exclude group : "androidx.core", module : "core-ktx"
+                        exclude group : "androidx.fragment", module : "fragment"
+                        exclude group : "androidx.customview", module : "customview"
+                        exclude group : "androidx.activity", module : "activity"
+                        exclude group : "androidx.lifecycle", module : "lifecycle-runtime"
+                    }
+                    androidTestImplementation(Deps.compose.junit4) {
+                        exclude group : "androidx.core", module : "core-ktx"
+                        exclude group : "androidx.fragment", module : "fragment"
+                        exclude group : "androidx.customview", module : "customview"
+                        exclude group : "androidx.activity", module : "activity"
+                        exclude group : "androidx.lifecycle", module : "lifecycle-runtime"
+                    }
+
+                    androidTestImplementation(Deps.compose.manifest)
+                }
+            }
         }
     }
 }

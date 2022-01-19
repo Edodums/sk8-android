@@ -1,4 +1,4 @@
-package unibo.it.local
+package unibo.it.local.dao
 
 import androidx.room.ColumnInfo
 import androidx.room.Dao

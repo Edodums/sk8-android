@@ -10,10 +10,10 @@ object Versions {
     const val targetSdk = 31
     const val minSdk = 21
 
-    const val composeMaterial = "1.0.5"
+    const val composeMaterial = "1.1.0-rc01"
     const val material = "1.3.0"
     const val ktx = "1.0.2"
-    const val room = "2.3.0"
+    const val room = "2.4.1"
     const val dataStore = "1.0.0"
     const val playCore = "1.10.0"
     const val coroutines = "1.5.2"
@@ -29,11 +29,12 @@ object Versions {
     const val testRoom = "2.1.0"
     const val barista = "4.0.0"
 
-    const val compose = "1.0.3"
-    const val material3 = "1.0.0-alpha02"
+    const val compose = "1.1.0-rc01"
+    const val material3 = "1.0.0-alpha03"
     const val composeNav = "2.4.0-alpha10"
     const val composeVm = "1.0.0-alpha07"
     const val composeActivity = "1.3.1"
+    const val appCompat = "1.4.1"
 
     const val accompanist = "0.20.2"
 
@@ -71,6 +72,7 @@ object Deps {
 }
 
 object AndroidDeps {
+    const val appCompat =  "androidx.appcompat:appcompat:${Versions.appCompat}"
     const val material = "com.google.android.material:material:${Versions.material}"
     const val ktx = "androidx.core:core-ktx:${Versions.ktx}"
     const val playCore = "com.google.android.play:core:${Versions.playCore}"
@@ -108,12 +110,18 @@ object Compose {
     const val material3 = "androidx.compose.material3:material3:${Versions.material3}"
     const val tooling = "androidx.compose.ui:ui-tooling:${Versions.compose}"
     const val icons = "androidx.compose.material:material-icons-extended:${Versions.compose}"
+    const val runtimeLivedata = "androidx.compose.runtime:runtime-livedata:${Versions.compose}"
+    const val foundation = "androidx.compose.foundation:foundation:${Versions.compose}"
+    const val layout = "androidx.compose.foundation:foundation-layout:${Versions.compose}"
     const val navigation = "androidx.navigation:navigation-compose:${Versions.composeNav}"
     const val viewModel = "androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.composeVm}"
     const val activity = "androidx.activity:activity-compose:${Versions.composeActivity}"
+    const val runtime = "androidx.compose.runtime:runtime:${Versions.compose}"
+    const val animation = "androidx.compose.animation:animation:${Versions.compose}"
     const val uiTest = "androidx.compose.ui:ui-test:${Versions.compose}"
     const val junit4 = "androidx.compose.ui:ui-test-junit4:${Versions.compose}"
     const val manifest = "androidx.compose.ui:ui-test-manifest:${Versions.compose}"
+
 }
 
 object TestDeos {
