@@ -10,6 +10,7 @@ import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import unibo.it.common.navigation.Destinations
 import unibo.it.sk8.presentation.LoadingScreen
 
 
@@ -21,7 +22,6 @@ import unibo.it.sk8.presentation.LoadingScreen
 fun Nav(startDestination: String = Destinations.Loading) {
     val navController = rememberAnimatedNavController()
     val context = LocalContext.current
-
     val actions = remember(navController) {
         Actions(navController = navController)
     }
@@ -37,7 +37,6 @@ fun Nav(startDestination: String = Destinations.Loading) {
             /*LoadingScreen(viewModel = , navController = )*/
         }
     }
-
 }
 
 internal data class Actions(val navController: NavHostController) {
@@ -49,12 +48,4 @@ internal data class Actions(val navController: NavHostController) {
 
 private object Constants {
     const val TWEEN_DURATION = 700
-}
-
-object Destinations {
-    const val Loading = "loading"
-    const val Authentication = "auth"
-    const val Menu = "menu"
-    const val Lookup = "lookup"
-    const val Controls = "controls"
 }

@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import unibo.it.sk8.R
-import unibo.it.sk8.navigation.Destinations
+import unibo.it.common.navigation.Destinations
 import unibo.it.sk8.ui.common.BasicLogo
 import unibo.it.sk8.ui.theme.start_skatin_container
 import unibo.it.sk8.ui.theme.start_skatin_content
