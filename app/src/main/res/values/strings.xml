@@ -1,13 +1,5 @@
 <resources>
     <string name="app_name">sk8</string>
-    <string name="loading_title">It\'s going \nplaces</string>
-    <string name="loading_subtitle">Please wait for the \nsynchronization to complete</string>
-    <string name="welcome">Welcome</string>
-    <string name="show_password">Show password</string>
-    <string name="hide_password">Hide password</string>
-    <string name="check_your_email">"Check\nyour mail"</string>
-    <string name="email">Email</string>
-    <string name="password">Password</string>
     <string name="not_paired">You have\nnot paired\na device</string>
     <string name="look_up_for_one">Look up for one</string>
     <string name="start"><b>start</b></string>
@@ -19,7 +11,6 @@
     <string name="scan_again">Scan Again →</string>
     <string name="dummy_device_1">Device 1</string>
     <string name="check">✔️</string>
-    <string name="continue_">Continue</string>
     <string name="add_device">Add Device</string>
     <string name="controls_text">Slide Up or Down\nto control it</string>
     <string name="title_ble">BLE</string>
