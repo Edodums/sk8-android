@@ -1,6 +1,8 @@
-package unibo.it.auth.presentation.textfield
+package unibo.it.auth.presentation.textfield.otp
 
-class OTPState :
+import unibo.it.auth.presentation.textfield.TextFieldState
+
+internal class OTPState :
     TextFieldState(validator = ::isOTPCharValid, errorFor = ::otpCharValidationError)
 
 private fun isOTPCharValid(text: String): Boolean {
@@ -10,13 +12,4 @@ private fun isOTPCharValid(text: String): Boolean {
 @Suppress("UNUSED_PARAMETER")
 private fun otpCharValidationError(text: String): String {
     return "Invalid OTP Char"
-}
-
-
-sealed class OTPStates(
-    val isValid: Boolean = false,
-    val data: MutableList<OTPState> = mutableListOf()
-) {
-    object Success : OTPStates(isValid = true)
-    object StillNot: OTPStates()
 }

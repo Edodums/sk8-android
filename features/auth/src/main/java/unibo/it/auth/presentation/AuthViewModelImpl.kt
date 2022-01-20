@@ -11,13 +11,13 @@ import com.amplifyframework.auth.options.AuthSignUpOptions
 import com.amplifyframework.hub.HubChannel
 import com.amplifyframework.kotlin.core.Amplify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
-import unibo.it.auth.AuthState
-import unibo.it.auth.presentation.textfield.Constant
-import unibo.it.auth.presentation.textfield.OTPStates
+import unibo.it.auth_api.presentation.AuthState
 import unibo.it.auth_api.presentation.AuthViewModel
+import unibo.it.domain.model.UserData
 import unibo.it.domain.repository.AuthRepository
 import com.amplifyframework.core.Amplify as AmplifyBacks
 
@@ -26,16 +26,8 @@ internal class AuthViewModelImpl constructor(
     private val repository: AuthRepository
 ) : AuthViewModel() {
     private val _authState = MutableStateFlow<AuthState>(AuthState.Sign)
-    val authState: StateFlow<AuthState> = _authState
-
-    private val _otpStates = MutableStateFlow<OTPStates>(OTPStates.StillNot)
-    val otpStates: StateFlow<OTPStates> = _otpStates
-
     private val _lastEmail = MutableLiveData<String>()
     private val lastEmail: LiveData<String> = _lastEmail
-
-    private var _otp: MutableList<String> = MutableList(size = Constant.OTP_CHARS) { "" }
-    private var otp: String = ""
 
     init {
         AmplifyBacks.Hub.subscribe(HubChannel.AUTH) { event ->
@@ -58,9 +50,13 @@ internal class AuthViewModelImpl constructor(
 
     suspend fun saveToken(token: String, email: String) {
         viewModelScope.launch {
-            repository.saveToken(token, email)
+            repository.saveToken(
+                UserData(token, email)
+            )
         }
     }
+
+    override fun loadAuthState(): Flow<AuthState> = flow { _authState }
 
     override suspend fun verify(code: String) {
         try {
@@ -109,20 +105,5 @@ internal class AuthViewModelImpl constructor(
         } catch (error: AuthException) {
             Log.e("AuthQuickStart", "Sign up failed", error)
         }
-    }
-
-    override fun addOTPChar(index: Int, text: String) {
-        _otp[index] = text
-
-        val currentOTP = _otp.filter { it.isNotEmpty() }.joinToString(separator = "")
-
-        if (currentOTP.length == Constant.OTP_CHARS) {
-            _otpStates.value = OTPStates.Success
-            otp = currentOTP
-        }
-    }
-
-    override  fun getOTP(): String {
-        return otp
     }
 }

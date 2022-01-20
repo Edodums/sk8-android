@@ -1,9 +1,9 @@
 package unibo.it.auth.presentation.textfield
 
-class PasswordState :
+internal class PasswordState :
     TextFieldState(validator = ::isPasswordValid, errorFor = ::passwordValidationError)
 
-class ConfirmPasswordState(private val passwordState: PasswordState) : TextFieldState() {
+internal class ConfirmPasswordState(private val passwordState: PasswordState) : TextFieldState() {
     override val isValid: Boolean
         get() = passwordAndConfirmationValid(passwordState.text, text)
 

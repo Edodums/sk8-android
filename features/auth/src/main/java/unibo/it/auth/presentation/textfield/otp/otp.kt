@@ -1,4 +1,4 @@
-package unibo.it.auth.presentation.textfield
+package unibo.it.auth.presentation.textfield.otp
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -27,6 +27,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -50,17 +51,26 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
-import unibo.it.auth.AuthViewModelImpl
+import org.koin.androidx.compose.getViewModel
 import unibo.it.auth.R
-import unibo.it.sk8.ui.theme.outline_OTP_focused
-import unibo.it.sk8.ui.theme.outline_OTP_unfocused
+import unibo.it.auth.presentation.ui.theme.outline_OTP_focused
+import unibo.it.auth.presentation.ui.theme.outline_OTP_unfocused
+import unibo.it.auth_api.presentation.AuthViewModel
 
+@Composable
+fun OTP() {
+    OTPScreen()
+}
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Composable
-fun OTPScreen(viewModel: AuthViewModelImpl) {
+private fun OTPScreen(
+    viewModel: OTPViewModel = getViewModel(),
+    authViewModel: AuthViewModel = getViewModel()
+) {
     val scale = 0.8f
-    val otpState by viewModel.otpStates.collectAsState()
+    val otpState by remember(viewModel) { viewModel }.loadOTPStates()
+        .collectAsState(OTPStates.StillNot)
     val coroutinesScope = rememberCoroutineScope()
     val focusManager = LocalFocusManager.current
 
@@ -93,7 +103,7 @@ fun OTPScreen(viewModel: AuthViewModelImpl) {
         Button(
             onClick = {
                 coroutinesScope.launch {
-                    viewModel.verify(viewModel.getOTP())
+                    authViewModel.verify(viewModel.getOTP())
                 }
             },
             enabled = otpState.isValid,
@@ -113,7 +123,7 @@ fun OTPScreen(viewModel: AuthViewModelImpl) {
 
 @ExperimentalCoroutinesApi
 @Composable
-fun OTPLine(viewModel: AuthViewModelImpl) {
+private fun OTPLine(viewModel: OTPViewModel) {
     Row(
         Modifier.horizontalScroll(rememberScrollState()),
         horizontalArrangement = Arrangement.SpaceBetween
@@ -135,8 +145,8 @@ fun OTPLine(viewModel: AuthViewModelImpl) {
 @OptIn(ExperimentalFoundationApi::class)
 @ExperimentalCoroutinesApi
 @Composable
-fun OTPChar(
-    viewModel: AuthViewModelImpl,
+private fun OTPChar(
+    viewModel: OTPViewModel,
     index: Int,
     focusRequester: FocusRequester,
     nextFocusRequester: FocusRequester? = null
