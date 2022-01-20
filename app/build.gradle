@@ -5,7 +5,7 @@ apply plugin: 'kotlin-kapt'
 
 dependencies {
   implementation(project(":libraries:test"))
-
+  implementation(project(":libraries:common"))
   implementation(project(":data:local"))
   implementation(project(":data:datastore"))
   implementation(project(":data:repository"))
@@ -13,6 +13,7 @@ dependencies {
   implementation(project(":domain"))
 
   implementation(project(":features:auth"))
+  implementation(project(":features:loading"))
 
   implementation Deps.logcat
   implementation Deps.accompanist.animation
