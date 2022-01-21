@@ -80,7 +80,8 @@ fun AuthScreen(
             when (authState) {
                 AuthState.OTP -> OTP()
                 AuthState.Sign -> SignScreen(viewModel)
-                AuthState.Verified -> onVerified()
+                AuthState.Verified ->
+                    actions.onVerified()
             }
         }
     )

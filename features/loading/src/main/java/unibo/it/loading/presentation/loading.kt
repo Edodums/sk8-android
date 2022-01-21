@@ -22,61 +22,52 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import org.koin.androidx.compose.getViewModel
-import unibo.it.loading.R
-import unibo.it.common.navigation.Destinations
 import unibo.it.common.ui.LoadingLogo
+import unibo.it.loading.R
 import unibo.it.loading_api.presentation.LoadingViewModel
 import unibo.it.loading_api.presentation.UserState
 
 @Composable
 fun LoadingScreen(
     viewModel: LoadingViewModel = getViewModel(),
-
+    onLoading: () -> Unit,
+    onAuthenticated: () -> Unit,
+    onNotAuthenticated: () -> Unit
 ) {
-    val userState by remember(viewModel) { viewModel }.loadUserState().collectAsState(UserState.Loading)
-    val actions = LoadingActions(
-        onLoading = onLoading()
-    )
+    val userState by remember(viewModel) { viewModel }.loadUserState()
+        .collectAsState(UserState.Loading)
 
     Loading(
         viewState = userState,
-        navController = navController
+        LoadingActions(
+            onLoading = onLoading,
+            onAuthenticated = onAuthenticated,
+            onNotAuthenticated = onNotAuthenticated
+        )
     )
 }
 
 @Composable
 private fun Loading(
     viewState: UserState,
-
+    loadingActions: LoadingActions
 ) {
     when (viewState) {
         UserState.Loading -> {
-            Loading(navController)
+            Loading(onLoading = loadingActions.onLoading)
         }
-        UserState.Authenticated -> {
-            Navigate(
-                navController = navController,
-                destination = Destinations.Menu
-            )
-        }
-        UserState.NotAuthenticated -> {
-            Navigate(
-                navController = navController,
-                destination = Destinations.Authentication
-            )
-        }
+        UserState.Authenticated ->
+            loadingActions.onAuthenticated()
+
+        UserState.NotAuthenticated ->
+            loadingActions.onNotAuthenticated()
     }
 }
 
 @Composable
-private fun Loading() {
-    Navigate(
-        navController = navController,
-        destination = Destinations.Menu
-    )
-
+private fun Loading(onLoading: () -> Unit) {
+    onLoading()
     Scaffold(
         content = { Content() },
         bottomBar = { BottomText() }
