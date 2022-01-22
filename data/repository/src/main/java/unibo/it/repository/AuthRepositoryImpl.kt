@@ -17,8 +17,9 @@ internal class AuthRepositoryImpl constructor(
         userPreferenceDataSource.saveToken(userDataMapper.toRepo(userData))
 
     override suspend fun loadData(): Flow<UserData?> = flow {
-        userPreferenceDataSource.loadData().collect {
-            userDataMapper.toDomain(it)
+            userPreferenceDataSource.loadData().collect { it?.let {
+                userDataMapper.toDomain(it)
+            }
         }
     }
 }
