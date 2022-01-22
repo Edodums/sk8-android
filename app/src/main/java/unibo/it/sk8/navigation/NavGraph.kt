@@ -14,6 +14,7 @@ import kotlinx.coroutines.FlowPreview
 import unibo.it.auth.presentation.AuthScreen
 import unibo.it.common.navigation.Destinations
 import unibo.it.loading.presentation.LoadingScreen
+import unibo.it.menu.presentation.MenuScreen
 
 
 /**
@@ -32,17 +33,18 @@ fun Nav(startDestination: String = Destinations.Loading) {
     AnimatedNavHost(navController = navController, startDestination = startDestination) {
         composable(
             route = Destinations.Loading,
-            enterTransition = { _, _ ->
+            enterTransition = {
                 slideIntoContainer(
                     AnimatedContentScope.SlideDirection.Right,
                     animationSpec = tween(Constants.TWEEN_DURATION)
                 )
-            }, exitTransition = { _, _ ->
+            }, exitTransition = {
                 slideOutOfContainer(
                     AnimatedContentScope.SlideDirection.Left,
-                    animationSpec = tween(700)
+                    animationSpec = tween(Constants.TWEEN_DURATION)
                 )
-            }) {
+            }
+        ) {
             LoadingScreen(
                 onLoading = actions.openMenu,
                 onAuthenticated = actions.openMenu,
@@ -52,29 +54,44 @@ fun Nav(startDestination: String = Destinations.Loading) {
 
         composable(
             route = Destinations.Authentication,
-            enterTransition = { _, _ ->
+            enterTransition = {
                 slideIntoContainer(
                     AnimatedContentScope.SlideDirection.Right,
                     animationSpec = tween(Constants.TWEEN_DURATION)
                 )
-            }, exitTransition = { _, _ ->
+            }, exitTransition = {
                 slideOutOfContainer(
                     AnimatedContentScope.SlideDirection.Left,
-                    animationSpec = tween(700)
+                    animationSpec = tween(Constants.TWEEN_DURATION)
                 )
-            }) {
+            }
+        ) {
             AuthScreen(
                 onVerified = actions.openMenu
             )
         }
 
-        /*composable(Destinations.Menu) {
+        composable(
+            route = Destinations.Menu,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentScope.SlideDirection.Right,
+                    animationSpec = tween(Constants.TWEEN_DURATION)
+                )
+            }, exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentScope.SlideDirection.Left,
+                    animationSpec = tween(Constants.TWEEN_DURATION)
+                )
+            }
+        ) {
             MenuScreen(
-                viewModel = hiltViewModel(),
-                navController = navController
+                onNotPairedClick = actions.openLookup,
+                onPairedClick = actions.openControls
             )
         }
 
+        /*
         composable(Destinations.Lookup) {
             LookupScreen(
                 viewModel = hiltViewModel(),
@@ -93,10 +110,6 @@ fun Nav(startDestination: String = Destinations.Loading) {
 }
 
 internal data class Actions(val navController: NavHostController) {
-    val openLoading: () -> Unit = {
-        navController.navigate(Destinations.Loading)
-    }
-
     val openAuthentication: () -> Unit = {
         navController.navigate(Destinations.Authentication)
     }
