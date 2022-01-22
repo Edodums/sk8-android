@@ -4,6 +4,4 @@ apply plugin: 'kotlin-android'
 dependencies {
 
     implementation Deps.coroutines.core
-    implementation Datastore.datastore_preferences
-    implementation Datastore.datastore_core
 }

@@ -1,4 +1,4 @@
-package unibo.it.menu
+package unibo.it.menu.presentation
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,34 +34,42 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
-import unibo.it.sk8.R
-import unibo.it.common.navigation.Destinations
-import unibo.it.sk8.ui.common.BasicLogo
-import unibo.it.sk8.ui.theme.start_skatin_container
-import unibo.it.sk8.ui.theme.start_skatin_content
+import org.koin.androidx.compose.getViewModel
+import unibo.it.common.ui.BasicLogo
+import unibo.it.menu.R
+import unibo.it.menu.presentation.ui.theme.start_skatin_container
+import unibo.it.menu.presentation.ui.theme.start_skatin_content
+import unibo.it.menu_api.presentation.MenuState
+import unibo.it.menu_api.presentation.MenuViewModel
 
 @Composable
 fun MenuScreen(
-    viewModel: MenuViewModel,
-    navController: NavHostController
+    viewModel: MenuViewModel = getViewModel(),
+    onNotPairedClick: () -> Unit,
+    onPairedClick: () -> Unit
 ) {
-    val menuState by viewModel.menuState.collectAsState()
+    val menuState by remember(viewModel) { viewModel }.isDeviceConnected()
+        .collectAsState(MenuState.NotPaired)
+
+    val actions = MenuActions(
+        onNotPairedClick = onNotPairedClick,
+        onPairedClick = onPairedClick
+    )
 
     Scaffold(
         backgroundColor = MaterialTheme.colorScheme.onPrimaryContainer,
         topBar = { BasicLogo() },
         content = {
             when (menuState) {
-                MenuState.NotPaired -> NotPairedScreen(viewModel, navController)
-                MenuState.Paired -> StartScreen(viewModel, navController)
+                MenuState.NotPaired -> NotPairedScreen(onNotPairedClick = actions.onNotPairedClick)
+                MenuState.Paired -> StartScreen(onPairedClick = actions.onPairedClick)
             }
         }
     )
 }
 
 @Composable
-fun StartScreen(viewModel: MenuViewModel, navController: NavHostController) {
+fun StartScreen(onPairedClick: () -> Unit) {
     Column(
         Modifier
             .padding(vertical = 32.dp)
@@ -86,13 +95,9 @@ fun StartScreen(viewModel: MenuViewModel, navController: NavHostController) {
             lineHeight = 60.sp,
             modifier = Modifier.width(width)
         )
-
         Spacer(modifier = Modifier.padding(all = 32.dp))
-
         Button(
-            onClick = {
-TODO
- },
+            onClick = onPairedClick,
             modifier = Modifier.width(width),
             shape = shape,
             colors = ButtonDefaults.buttonColors(
@@ -125,13 +130,12 @@ TODO
                     textAlign = TextAlign.Left
                 )
             }
-
         )
     }
 }
 
 @Composable
-fun NotPairedScreen(viewModel: MenuViewModel, navController: NavHostController) {
+fun NotPairedScreen(onNotPairedClick: () -> Unit) {
     Column(
         Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -147,9 +151,7 @@ fun NotPairedScreen(viewModel: MenuViewModel, navController: NavHostController) 
         )
         Spacer(modifier = Modifier.padding(all = 32.dp))
         Button(
-            onClick = {
-                navController.navigate(Destinations.Lookup)
-            },
+            onClick = onNotPairedClick,
             modifier = Modifier.width(300.dp),
             enabled = true,
             colors = ButtonDefaults.buttonColors(

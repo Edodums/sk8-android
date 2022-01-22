@@ -1,0 +1,7 @@
+<resources>
+    <string name="not_paired">You have\nnot paired\na device</string>
+    <string name="look_up_for_one">Look up for one</string>
+    <string name="are_you_ready">Are you\nready?</string>
+    <string name="start"><b>start</b></string>
+    <string name="skatin">skatin</string>
+</resources>

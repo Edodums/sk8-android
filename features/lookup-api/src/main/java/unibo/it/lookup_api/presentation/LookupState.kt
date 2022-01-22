@@ -1,4 +1,4 @@
-package unibo.it.lookup
+package unibo.it.lookup_api.presentation
 
 sealed class LookupState(
     val isAction: Boolean = true,

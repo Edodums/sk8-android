@@ -1,4 +1,4 @@
-package unibo.it.lookup.ble
+package unibo.it.lookup_api.presentation
 
 sealed class BluetoothState(
     val isEnabled: Boolean = false

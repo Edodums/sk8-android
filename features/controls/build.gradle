@@ -3,9 +3,6 @@ apply plugin: 'kotlin-android'
 
 dependencies {
     implementation(project(":libraries:common"))
-    implementation(project(":features:loading-api"))
+    implementation(project(":features:controls-api"))
     implementation(project(":domain"))
-
-    implementation Amplify.aws_core_kotlin
-    implementation Amplify.aws_auth_cognito
 }
