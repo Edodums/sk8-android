@@ -20,6 +20,8 @@ abstract class CommonDataStore constructor(
     suspend fun save(data: Data) {
         context.store.edit { preferences ->
             preferenceKeys.keys.map {
+                // TODO: if you have time fix this using properly generics and if you can avoid reflection
+                @Suppress("UNCHECKED_CAST")
                 val key = it.value as Preferences.Key<Any>
                 val value = data.getValue(key = it.key)
 
