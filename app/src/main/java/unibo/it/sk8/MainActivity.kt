@@ -18,9 +18,11 @@ import com.amplifyframework.AmplifyException
 import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin
 import com.amplifyframework.core.Amplify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import unibo.it.sk8.navigation.Nav
 import unibo.it.sk8.ui.theme.Sk8Theme
 
+@FlowPreview
 class MainActivity : ComponentActivity() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
