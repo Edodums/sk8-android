@@ -1,15 +1,10 @@
 package unibo.it.sk8
 
-import android.app.Activity
-import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothManager
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -17,12 +12,17 @@ import androidx.core.view.WindowInsetsControllerCompat
 import com.amplifyframework.AmplifyException
 import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin
 import com.amplifyframework.core.Amplify
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import unibo.it.sk8.navigation.Nav
 import unibo.it.sk8.ui.theme.Sk8Theme
 
+<<<<<<< HEAD
 @FlowPreview
+=======
+@AndroidEntryPoint
+>>>>>>> main
 class MainActivity : ComponentActivity() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -32,36 +32,14 @@ class MainActivity : ComponentActivity() {
         softInputMode()
         configureAmplify()
         fullScreen()
-        verifyBluetoothCapabilities()
 
         setContent {
             SK8App()
         }
     }
 
-    private fun verifyBluetoothCapabilities() {
-        val bluetoothAdapter = (getSystemService(BLUETOOTH_SERVICE) as BluetoothManager).adapter
-
-        when {
-            bluetoothAdapter == null ->
-                // Bluetooth is not supported on this hardware platform
-                showErrorText("onCreate: bluetooth not supported")
-            !bluetoothAdapter.isEnabled -> // Bluetooth is OFF, user should turn it ON
-                // Prompt the use to allow the app to turn on Bluetooth
-            launchIntent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-        }
-    }
-
-    private var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            // There are no request codes
-            val data: Intent? = result.data
-            Log.i("BLUETOOTH DATA", data.toString())
-        }
-    }
-
-    private fun launchIntent(intentName: String) {
-        resultLauncher.launch(Intent(intentName))
+    private fun softInputMode() {
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
     }
 
     @ExperimentalCoroutinesApi
@@ -94,16 +72,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun softInputMode() {
-        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
-    }
-
-    private fun showErrorText(msg: String) {
-        Log.d(BLUETOOTH_TAG, "showErrorText: $msg")
-    }
-
     companion object {
-        private const val BLUETOOTH_TAG = "BLUETOOTH ERROR"
-        private const val APP_NAME = "SK8"
+        const val APP_NAME = "SK8"
     }
 }

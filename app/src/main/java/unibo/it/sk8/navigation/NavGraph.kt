@@ -1,9 +1,7 @@
 package unibo.it.sk8.navigation
 
-import androidx.compose.animation.AnimatedContentScope
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
+<<<<<<< HEAD
 import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.AnimatedNavHost
@@ -92,6 +90,56 @@ fun Nav(startDestination: String = Destinations.Loading) {
         }
 
         /*
+=======
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import unibo.it.sk8.auth.AuthScreen
+import unibo.it.sk8.controls.ControlsScreen
+import unibo.it.sk8.loading.LoadingScreen
+import unibo.it.sk8.lookup.LookupScreen
+import unibo.it.sk8.menu.MenuScreen
+
+object Destinations {
+    const val Loading = "loading"
+    const val Authentication = "auth"
+    const val Menu = "menu"
+    const val Lookup = "lookup"
+    const val Controls = "controls"
+}
+
+@OptIn(FlowPreview::class)
+@ExperimentalCoroutinesApi
+@Composable
+fun Nav() {
+    val navController = rememberNavController()
+
+    NavHost(navController = navController, startDestination = Destinations.Loading) {
+        composable(Destinations.Loading) {
+            LoadingScreen(
+                viewModel = hiltViewModel(),
+                navController = navController
+            )
+        }
+
+        composable(Destinations.Authentication) {
+            AuthScreen(
+                viewModel = hiltViewModel(),
+                navController = navController
+            )
+        }
+
+        composable(Destinations.Menu) {
+            MenuScreen(
+                viewModel = hiltViewModel(),
+                navController = navController
+            )
+        }
+
+>>>>>>> main
         composable(Destinations.Lookup) {
             LookupScreen(
                 viewModel = hiltViewModel(),
@@ -104,6 +152,7 @@ fun Nav(startDestination: String = Destinations.Loading) {
                 viewModel = hiltViewModel(),
                 navController = navController
             )
+<<<<<<< HEAD
         }*/
 
     }
@@ -131,3 +180,8 @@ internal data class Actions(val navController: NavHostController) {
 private object Constants {
     const val TWEEN_DURATION = 700
 }
+=======
+        }
+    }
+}
+>>>>>>> main

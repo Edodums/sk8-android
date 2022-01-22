@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 include(":app")
 /*include(":features:navigation")
 include(":features:lookup")
@@ -14,3 +15,6 @@ include ':features:lookup'
 include ':features:lookup-api'
 include ':features:controls'
 include ':features:controls-api'
+=======
+include ':app'
+>>>>>>> main

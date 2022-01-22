@@ -1,6 +1,7 @@
 package unibo.it.sk8
 
 import android.app.Application
+<<<<<<< HEAD
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import org.koin.android.BuildConfig
@@ -45,3 +46,9 @@ class SK8 : Application() {
         }
     }
 }
+=======
+import dagger.hilt.android.HiltAndroidApp
+
+@HiltAndroidApp
+class SK8 : Application()
+>>>>>>> main
