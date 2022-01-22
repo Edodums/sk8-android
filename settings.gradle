@@ -1,1 +1,16 @@
-include ':app'
+include(":app")
+/*include(":features:navigation")
+include(":features:lookup")
+include(":features:loading")
+include(":features:controls")
+include(":features:menu")
+include(":features:settings")*/
+include ':features:loading-api',':features:auth-api',':features:auth',':domain',':data:repository',':data:datastore',':data:local',':libraries:test'
+include ':features:loading'
+include ':libraries:common'
+include ':features:menu'
+include ':features:menu-api'
+include ':features:lookup'
+include ':features:lookup-api'
+include ':features:controls'
+include ':features:controls-api'

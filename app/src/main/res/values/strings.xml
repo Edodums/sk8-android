@@ -1,26 +1,21 @@
 <resources>
     <string name="app_name">sk8</string>
-    <string name="loading_title">It\'s going \nplaces</string>
-    <string name="loading_subtitle">Please wait for the \nsynchronization to complete</string>
-    <string name="welcome">Welcome</string>
-    <string name="show_password">Show password</string>
-    <string name="hide_password">Hide password</string>
-    <string name="check_your_email">"Check\nyour mail"</string>
-    <string name="email">Email</string>
-    <string name="password">Password</string>
-    <string name="not_paired">You have\nnot paired\na device</string>
-    <string name="look_up_for_one">Look up for one</string>
-    <string name="start"><b>start</b></string>
-    <string name="skatin">skatin</string>
-    <string name="are_you_ready">Are you\nready?</string>
     <string name="click_circle_description">Click the circle\nbutton in the\ncenter\n⬇️</string>
     <string name="looking_for">Just wait a little\nand let me handle\nthe lookup\n🤠</string>
     <string name="these_ones">These are the ones\nI\'ve found\n🎯 </string>
     <string name="scan_again">Scan Again →</string>
     <string name="dummy_device_1">Device 1</string>
     <string name="check">✔️</string>
-    <string name="continue_">Continue</string>
     <string name="add_device">Add Device</string>
     <string name="controls_text">Slide Up or Down\nto control it</string>
+    <string name="title_ble">BLE</string>
+    <string name="title_lookup">LookUp Screen Feature</string>
+    <string name="title_dynamicfeature">Module Title</string>
+    <string name="title_navigation">Navigation module</string>
+    <string name="title_loading">Loading Screen</string>
+    <string name="title_auth">Auth Screen</string>
+    <string name="title_controls">Controls Screen</string>
+    <string name="title_menu">Menu Screen</string>
+    <string name="title_settings">Settings Screen</string>
 </resources>
 

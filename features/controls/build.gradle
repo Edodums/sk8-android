@@ -1,0 +1,8 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+dependencies {
+    implementation(project(":libraries:common"))
+    implementation(project(":features:controls-api"))
+    implementation(project(":domain"))
+}

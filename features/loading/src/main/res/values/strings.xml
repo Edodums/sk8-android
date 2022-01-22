@@ -1,0 +1,4 @@
+<resources>
+    <string name="loading_title">It\'s going \nplaces</string>
+    <string name="loading_subtitle">Please wait for the \nsynchronization to complete</string>
+</resources>

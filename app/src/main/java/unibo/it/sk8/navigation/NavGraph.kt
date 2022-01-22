@@ -1,54 +1,97 @@
 package unibo.it.sk8.navigation
 
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import androidx.compose.runtime.remember
+import androidx.navigation.NavHostController
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.composable
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import unibo.it.sk8.auth.AuthScreen
-import unibo.it.sk8.controls.ControlsScreen
-import unibo.it.sk8.loading.LoadingScreen
-import unibo.it.sk8.lookup.LookupScreen
-import unibo.it.sk8.menu.MenuScreen
+import unibo.it.auth.presentation.AuthScreen
+import unibo.it.common.navigation.Destinations
+import unibo.it.loading.presentation.LoadingScreen
+import unibo.it.menu.presentation.MenuScreen
 
-object Destinations {
-    const val Loading = "loading"
-    const val Authentication = "auth"
-    const val Menu = "menu"
-    const val Lookup = "lookup"
-    const val Controls = "controls"
-}
 
-@OptIn(FlowPreview::class)
+/**
+ * https://github.com/igorescodro/alkaa/blob/main/app/src/main/java/com/escodro/alkaa/navigation/NavGraph.kt
+ */
 @ExperimentalCoroutinesApi
+@FlowPreview
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun Nav() {
-    val navController = rememberNavController()
+fun Nav(startDestination: String = Destinations.Loading) {
+    val navController = rememberAnimatedNavController()
+    val actions = remember(navController) {
+        Actions(navController = navController)
+    }
 
-    NavHost(navController = navController, startDestination = Destinations.Loading) {
-        composable(Destinations.Loading) {
+    AnimatedNavHost(navController = navController, startDestination = startDestination) {
+        composable(
+            route = Destinations.Loading,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentScope.SlideDirection.Right,
+                    animationSpec = tween(Constants.TWEEN_DURATION)
+                )
+            }, exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentScope.SlideDirection.Left,
+                    animationSpec = tween(Constants.TWEEN_DURATION)
+                )
+            }
+        ) {
             LoadingScreen(
-                viewModel = hiltViewModel(),
-                navController = navController
+                onLoading = actions.openMenu,
+                onAuthenticated = actions.openMenu,
+                onNotAuthenticated = actions.openAuthentication
             )
         }
 
-        composable(Destinations.Authentication) {
+        composable(
+            route = Destinations.Authentication,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentScope.SlideDirection.Right,
+                    animationSpec = tween(Constants.TWEEN_DURATION)
+                )
+            }, exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentScope.SlideDirection.Left,
+                    animationSpec = tween(Constants.TWEEN_DURATION)
+                )
+            }
+        ) {
             AuthScreen(
-                viewModel = hiltViewModel(),
-                navController = navController
+                onVerified = actions.openMenu
             )
         }
 
-        composable(Destinations.Menu) {
+        composable(
+            route = Destinations.Menu,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentScope.SlideDirection.Right,
+                    animationSpec = tween(Constants.TWEEN_DURATION)
+                )
+            }, exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentScope.SlideDirection.Left,
+                    animationSpec = tween(Constants.TWEEN_DURATION)
+                )
+            }
+        ) {
             MenuScreen(
-                viewModel = hiltViewModel(),
-                navController = navController
+                onNotPairedClick = actions.openLookup,
+                onPairedClick = actions.openControls
             )
         }
 
+        /*
         composable(Destinations.Lookup) {
             LookupScreen(
                 viewModel = hiltViewModel(),
@@ -61,6 +104,30 @@ fun Nav() {
                 viewModel = hiltViewModel(),
                 navController = navController
             )
-        }
+        }*/
+
     }
+}
+
+internal data class Actions(val navController: NavHostController) {
+    val openAuthentication: () -> Unit = {
+        navController.navigate(Destinations.Authentication)
+    }
+
+    val openMenu: () -> Unit = {
+        navController.navigate(Destinations.Menu)
+    }
+
+    val openControls: () -> Unit = {
+        navController.navigate(Destinations.Controls)
+    }
+
+    val openLookup: () -> Unit = {
+        navController.navigate(Destinations.Lookup)
+    }
+}
+
+
+private object Constants {
+    const val TWEEN_DURATION = 700
 }

@@ -1,17 +1,13 @@
-import unibo.it.sk8.buildsrc.Libs
-import unibo.it.sk8.buildsrc.Urls
-import unibo.it.sk8.buildsrc.Versions
-
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
     repositories {
         google()
-        mavenCentral()
     }
+
     dependencies {
-        classpath Libs.androidGradlePlugin
-        classpath Libs.Kotlin.gradlePlugin
-        classpath Libs.Hilt.gradlePlugin
+        classpath Tools.androidGradlePlugin
+        classpath KotlinDeps.gradlePlugin
     }
 }
 
@@ -19,14 +15,12 @@ plugins {
     id 'com.diffplug.spotless' version '6.0.0'
 }
 
+def composableModules = ['app', 'auth', 'loading', 'common', 'menu', 'controls', 'lookup']
+
 subprojects {
     repositories {
         google()
         mavenCentral()
-
-        if (!Libs.AndroidX.Compose.snapshot.isEmpty()) {
-            maven { url Urls.composeSnapshotRepo }
-        }
     }
 
     apply plugin: 'com.diffplug.spotless'
@@ -35,26 +29,137 @@ subprojects {
             target '**/*.kt'
             targetExclude("$buildDir/**/*.kt")
             targetExclude('bin/**/*.kt')
-            ktlint(Versions.ktLint).userData([android: "true"])
-            licenseHeaderFile rootProject.file('app/src/main/java/unibo/it/sk8/spotless/copyright.kt')
+            ktlint(Versions.ktLint)
+            licenseHeaderFile rootProject.file('spotless/copyright.kt')
         }
     }
 
-    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+    tasks.withType(KotlinCompile).configureEach {
         kotlinOptions {
             // Treat all Kotlin warnings as errors (disabled by default)
             allWarningsAsErrors = project.hasProperty("warningsAsErrors") ? project.warningsAsErrors : false
 
-            jvmTarget = "1.8"
+            jvmTarget = JavaVersion.VERSION_1_8.toString()
 
             // Use experimental APIs
             freeCompilerArgs += '-Xopt-in=kotlin.RequiresOptIn'
         }
     }
+
     // androidx.test and hilt are forcing JUnit, 4.12. This forces them to use 4.13
     configurations.configureEach {
         resolutionStrategy {
-            force Libs.JUnit.junit
+            force Deps.test.junit
+        }
+    }
+
+    // to avoid all the repetitions you can use this "subprojcts.afterEvaluate"
+    afterEvaluate { project ->
+        if (project.hasProperty("android")) {
+            android {
+                defaultConfig {
+                    compileSdk Versions.compileSdk
+                    versionCode Releases.versionCode
+                    versionName Releases.versionName
+                    minSdkVersion Versions.minSdk
+                    targetSdkVersion Versions.targetSdk
+                    vectorDrawables.useSupportLibrary = true
+                    multiDexEnabled true
+                    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+                }
+
+                buildTypes {
+                    release {
+                        minifyEnabled true
+                        proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+                    }
+                }
+
+                sourceSets {
+                    main.java.srcDirs += 'src/main/kotlin'
+                    test.java.srcDirs += 'src/test/kotlin'
+                }
+
+                compileOptions {
+                    sourceCompatibility = JavaVersion.VERSION_1_8
+                    targetCompatibility = JavaVersion.VERSION_1_8
+                }
+
+                packagingOptions {
+                    // Multiple dependency bring these files in. Exclude them to enable
+                    // our test APK to build (has no effect on our AARs)
+                    excludes += "/META-INF/AL2.0"
+                    excludes += "/META-INF/LGPL2.1"
+                }
+
+                kotlinOptions {
+                    jvmTarget = JavaVersion.VERSION_1_8.toString()
+                }
+
+
+                if (composableModules.contains(name.toLowerCase())) {
+                    buildFeatures {
+                        compose true
+
+                        // Disable unused AGP features
+                        buildConfig false
+                        aidl false
+                        renderScript false
+                        resValues false
+                        shaders false
+                    }
+
+                    composeOptions {
+                        kotlinCompilerExtensionVersion '1.1.0-rc02' // For Kotlin 1.6.10. Revert with rc03
+                    }
+                }
+            }
+
+            dependencies {
+                implementation fileTree(include: ['*.jar'], dir: 'libs')
+                implementation KotlinDeps.stdlib
+                implementation AndroidDeps.ktx
+                implementation Deps.koin.android
+                implementation Deps.coroutines.core
+            }
+
+            if (composableModules.contains(name.toLowerCase())) {
+                dependencies {
+                    implementation AndroidDeps.appCompat
+                    implementation Deps.koin.compose
+                    implementation Deps.compose.ui
+                    implementation Deps.compose.activity
+                    implementation Deps.compose.navigation
+                    implementation Deps.compose.runtime
+                    implementation Deps.compose.runtimeLivedata
+                    implementation Deps.compose.foundation
+                    implementation Deps.compose.material
+                    implementation Deps.compose.icons
+                    implementation Deps.compose.material3
+                    implementation Deps.compose.layout
+                    implementation Deps.compose.animation
+                    implementation Deps.compose.tooling
+                    implementation Deps.compose.viewModel
+
+                    androidTestImplementation(Deps.compose.uiTest) {
+                        exclude group : "androidx.core", module : "core-ktx"
+                        exclude group : "androidx.fragment", module : "fragment"
+                        exclude group : "androidx.customview", module : "customview"
+                        exclude group : "androidx.activity", module : "activity"
+                        exclude group : "androidx.lifecycle", module : "lifecycle-runtime"
+                    }
+                    androidTestImplementation(Deps.compose.junit4) {
+                        exclude group : "androidx.core", module : "core-ktx"
+                        exclude group : "androidx.fragment", module : "fragment"
+                        exclude group : "androidx.customview", module : "customview"
+                        exclude group : "androidx.activity", module : "activity"
+                        exclude group : "androidx.lifecycle", module : "lifecycle-runtime"
+                    }
+
+                    androidTestImplementation(Deps.compose.manifest)
+                }
+            }
         }
     }
 }
+
