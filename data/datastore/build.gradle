@@ -3,16 +3,12 @@ apply plugin: 'kotlin-android'
 
 
 dependencies{
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation KotlinDeps.stdlib
-    implementation AndroidDeps.ktx
-
     implementation(project(":data:repository"))
 
-    implementation Deps.koin.android
     implementation Deps.coroutines.android
     implementation Deps.coroutines.core
     implementation Deps.android.dataStore.datastore_core
     implementation Deps.android.dataStore.datastore_preferences
+    implementation Reflections.reflection
     implementation Amplify.aws_datastore
 }

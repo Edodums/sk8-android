@@ -41,7 +41,6 @@ android {
 dependencies {
     implementation(project(":data:repository"))
 
-    implementation Deps.koin.android
     implementation Deps.android.room.room_runtime
     implementation Deps.android.room.room_ktx
     kapt Deps.android.room.room_compiler

@@ -6,14 +6,27 @@ apply plugin: 'kotlin-kapt'
 dependencies {
   implementation(project(":libraries:test"))
   implementation(project(":libraries:common"))
+
   implementation(project(":data:local"))
   implementation(project(":data:datastore"))
   implementation(project(":data:repository"))
 
   implementation(project(":domain"))
 
+  implementation(project(":features:auth-api"))
   implementation(project(":features:auth"))
+
+  implementation(project(":features:loading-api"))
   implementation(project(":features:loading"))
+
+  implementation(project(":features:menu-api"))
+  implementation(project(":features:menu"))
+
+  implementation(project(":features:lookup-api"))
+  implementation(project(":features:lookup"))
+
+  implementation(project(":features:controls-api"))
+  implementation(project(":features:controls"))
 
   implementation Deps.logcat
   implementation Deps.accompanist.animation

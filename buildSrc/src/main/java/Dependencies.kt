@@ -4,7 +4,7 @@ object Releases {
 }
 
 object Versions {
-    const val kotlin = "1.5.30"
+    const val kotlin = "1.6.10"
 
     const val compileSdk = 31
     const val targetSdk = 31
@@ -18,7 +18,7 @@ object Versions {
     const val playCore = "1.10.0"
     const val coroutines = "1.5.2"
 
-    const val koin = "3.1.0"
+    const val koin = "3.1.5"
 
     const val testJunit = "4.12"
     const val testRunner = "1.1.1"
@@ -36,7 +36,7 @@ object Versions {
     const val composeActivity = "1.3.1"
     const val appCompat = "1.4.1"
 
-    const val accompanist = "0.20.2"
+    const val accompanist = "0.21.5-rc"
 
     const val ktLint = "0.43.2"
 

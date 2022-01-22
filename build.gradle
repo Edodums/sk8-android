@@ -8,7 +8,6 @@ buildscript {
     dependencies {
         classpath Tools.androidGradlePlugin
         classpath KotlinDeps.gradlePlugin
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10'
     }
 }
 
@@ -16,7 +15,7 @@ plugins {
     id 'com.diffplug.spotless' version '6.0.0'
 }
 
-def composableModules = ['app', 'auth', 'loading', 'common']
+def composableModules = ['app', 'auth', 'loading', 'common', 'menu', 'controls', 'lookup']
 
 subprojects {
     repositories {
@@ -40,7 +39,7 @@ subprojects {
             // Treat all Kotlin warnings as errors (disabled by default)
             allWarningsAsErrors = project.hasProperty("warningsAsErrors") ? project.warningsAsErrors : false
 
-            jvmTarget = "1.8"
+            jvmTarget = JavaVersion.VERSION_1_8.toString()
 
             // Use experimental APIs
             freeCompilerArgs += '-Xopt-in=kotlin.RequiresOptIn'
@@ -94,8 +93,7 @@ subprojects {
                 }
 
                 kotlinOptions {
-                    jvmTarget = "1.8"
-                    useIR = true
+                    jvmTarget = JavaVersion.VERSION_1_8.toString()
                 }
 
 
@@ -122,11 +120,13 @@ subprojects {
                 implementation KotlinDeps.stdlib
                 implementation AndroidDeps.ktx
                 implementation Deps.koin.android
+                implementation Deps.coroutines.core
             }
 
             if (composableModules.contains(name.toLowerCase())) {
                 dependencies {
                     implementation AndroidDeps.appCompat
+                    implementation Deps.koin.compose
                     implementation Deps.compose.ui
                     implementation Deps.compose.activity
                     implementation Deps.compose.navigation
