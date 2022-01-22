@@ -1,29 +1,13 @@
-<<<<<<< HEAD
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-=======
-import unibo.it.sk8.buildsrc.Libs
-import unibo.it.sk8.buildsrc.Urls
-import unibo.it.sk8.buildsrc.Versions
-
->>>>>>> main
 
 buildscript {
     repositories {
         google()
-<<<<<<< HEAD
     }
 
     dependencies {
         classpath Tools.androidGradlePlugin
         classpath KotlinDeps.gradlePlugin
-=======
-        mavenCentral()
-    }
-    dependencies {
-        classpath Libs.androidGradlePlugin
-        classpath Libs.Kotlin.gradlePlugin
-        classpath Libs.Hilt.gradlePlugin
->>>>>>> main
     }
 }
 
@@ -31,22 +15,12 @@ plugins {
     id 'com.diffplug.spotless' version '6.0.0'
 }
 
-<<<<<<< HEAD
 def composableModules = ['app', 'auth', 'loading', 'common', 'menu', 'controls', 'lookup']
 
-=======
->>>>>>> main
 subprojects {
     repositories {
         google()
         mavenCentral()
-<<<<<<< HEAD
-=======
-
-        if (!Libs.AndroidX.Compose.snapshot.isEmpty()) {
-            maven { url Urls.composeSnapshotRepo }
-        }
->>>>>>> main
     }
 
     apply plugin: 'com.diffplug.spotless'
@@ -55,36 +29,22 @@ subprojects {
             target '**/*.kt'
             targetExclude("$buildDir/**/*.kt")
             targetExclude('bin/**/*.kt')
-<<<<<<< HEAD
             ktlint(Versions.ktLint)
             licenseHeaderFile rootProject.file('spotless/copyright.kt')
         }
     }
 
     tasks.withType(KotlinCompile).configureEach {
-=======
-            ktlint(Versions.ktLint).userData([android: "true"])
-            licenseHeaderFile rootProject.file('app/src/main/java/unibo/it/sk8/spotless/copyright.kt')
-        }
-    }
-
-    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
->>>>>>> main
         kotlinOptions {
             // Treat all Kotlin warnings as errors (disabled by default)
             allWarningsAsErrors = project.hasProperty("warningsAsErrors") ? project.warningsAsErrors : false
 
-<<<<<<< HEAD
             jvmTarget = JavaVersion.VERSION_1_8.toString()
-=======
-            jvmTarget = "1.8"
->>>>>>> main
 
             // Use experimental APIs
             freeCompilerArgs += '-Xopt-in=kotlin.RequiresOptIn'
         }
     }
-<<<<<<< HEAD
 
     // androidx.test and hilt are forcing JUnit, 4.12. This forces them to use 4.13
     configurations.configureEach {
@@ -203,12 +163,3 @@ subprojects {
     }
 }
 
-=======
-    // androidx.test and hilt are forcing JUnit, 4.12. This forces them to use 4.13
-    configurations.configureEach {
-        resolutionStrategy {
-            force Libs.JUnit.junit
-        }
-    }
-}
->>>>>>> main

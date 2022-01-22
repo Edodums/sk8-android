@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:features/loading/src/main/java/unibo/it/loading/presentation/LoadingViewModelImpl.kt
 package unibo.it.loading.presentation
-========
-package unibo.it.sk8.loading
->>>>>>>> main:app/src/main/java/unibo/it/sk8/loading/LoadingViewModel.kt
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
@@ -17,15 +13,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
-<<<<<<<< HEAD:features/loading/src/main/java/unibo/it/loading/presentation/LoadingViewModelImpl.kt
 import unibo.it.domain.model.UserData
 import unibo.it.domain.repository.AuthRepository
 import unibo.it.loading_api.presentation.LoadingViewModel
 import unibo.it.loading_api.presentation.UserState
-========
-import unibo.it.sk8.data.UserData
-import unibo.it.sk8.database.UserPreferences
->>>>>>>> main:app/src/main/java/unibo/it/sk8/loading/LoadingViewModel.kt
 
 @InternalCoroutinesApi
 class LoadingViewModelImpl constructor(

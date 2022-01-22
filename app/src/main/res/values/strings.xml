@@ -8,5 +8,14 @@
     <string name="check">✔️</string>
     <string name="add_device">Add Device</string>
     <string name="controls_text">Slide Up or Down\nto control it</string>
+    <string name="title_ble">BLE</string>
+    <string name="title_lookup">LookUp Screen Feature</string>
+    <string name="title_dynamicfeature">Module Title</string>
+    <string name="title_navigation">Navigation module</string>
+    <string name="title_loading">Loading Screen</string>
+    <string name="title_auth">Auth Screen</string>
+    <string name="title_controls">Controls Screen</string>
+    <string name="title_menu">Menu Screen</string>
+    <string name="title_settings">Settings Screen</string>
 </resources>
 

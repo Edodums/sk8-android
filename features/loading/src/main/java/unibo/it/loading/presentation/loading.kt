@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:features/loading/src/main/java/unibo/it/loading/presentation/loading.kt
 package unibo.it.loading.presentation
-========
-package unibo.it.sk8.loading
->>>>>>>> main:app/src/main/java/unibo/it/sk8/loading/Loading.kt
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

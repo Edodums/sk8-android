@@ -1,5 +1,7 @@
-package unibo.it.sk8.controls
+/*
+package unibo.it.sk8.presentation
 
+import android.view.Surface
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
@@ -15,7 +17,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
+import androidx.compose.material3.Surface
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,7 +43,7 @@ import kotlin.math.roundToInt
 import unibo.it.sk8.R
 import unibo.it.sk8.ui.common.BasicLogo
 
-@OptIn(ExperimentalMaterialApi::class)
+
 @Composable
 fun ControlsScreen(
     viewModel: ControlsViewModel,
@@ -50,6 +52,7 @@ fun ControlsScreen(
     val scope = rememberCoroutineScope()
 
     Scaffold(
+
         backgroundColor = MaterialTheme.colorScheme.onPrimaryContainer,
         topBar = { BasicLogo() },
         content = {
@@ -71,7 +74,7 @@ fun ControlsScreen(
     )
 }
 
-@ExperimentalMaterialApi
+
 @Composable
 fun Skate() {
     val offsetFix = 60
@@ -121,3 +124,4 @@ fun Skate() {
         }
     }
 }
+*/

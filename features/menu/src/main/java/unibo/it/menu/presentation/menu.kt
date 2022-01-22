@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:features/menu/src/main/java/unibo/it/menu/presentation/menu.kt
 package unibo.it.menu.presentation
-========
-package unibo.it.sk8.menu
->>>>>>>> main:app/src/main/java/unibo/it/sk8/menu/menu.kt
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -101,11 +97,7 @@ fun StartScreen(onPairedClick: () -> Unit) {
         )
         Spacer(modifier = Modifier.padding(all = 32.dp))
         Button(
-<<<<<<<< HEAD:features/menu/src/main/java/unibo/it/menu/presentation/menu.kt
             onClick = onPairedClick,
-========
-            onClick = { /*TODO*/ },
->>>>>>>> main:app/src/main/java/unibo/it/sk8/menu/menu.kt
             modifier = Modifier.width(width),
             shape = shape,
             colors = ButtonDefaults.buttonColors(
