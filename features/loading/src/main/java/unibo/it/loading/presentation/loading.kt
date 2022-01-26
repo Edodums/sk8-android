@@ -1,5 +1,6 @@
 package unibo.it.loading.presentation
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.InternalCoroutinesApi
 import org.koin.androidx.compose.getViewModel
 import unibo.it.common.ui.LoadingLogo
 import unibo.it.loading.R
@@ -31,17 +33,14 @@ import unibo.it.loading_api.presentation.UserState
 @Composable
 fun LoadingScreen(
     viewModel: LoadingViewModel = getViewModel(),
-    onLoading: () -> Unit,
     onAuthenticated: () -> Unit,
     onNotAuthenticated: () -> Unit
 ) {
-    val userState by remember(viewModel) { viewModel }.loadUserState()
-        .collectAsState(UserState.Loading)
+    val userState by viewModel.userState.collectAsState(UserState.Loading)
 
     Loading(
         viewState = userState,
         LoadingActions(
-            onLoading = onLoading,
             onAuthenticated = onAuthenticated,
             onNotAuthenticated = onNotAuthenticated
         )
@@ -55,7 +54,7 @@ private fun Loading(
 ) {
     when (viewState) {
         UserState.Loading -> {
-            Loading(onLoading = loadingActions.onLoading)
+            Loading()
         }
         UserState.Authenticated ->
             loadingActions.onAuthenticated()
@@ -66,8 +65,7 @@ private fun Loading(
 }
 
 @Composable
-private fun Loading(onLoading: () -> Unit) {
-    onLoading()
+private fun Loading() {
     Scaffold(
         content = { Content() },
         bottomBar = { BottomText() }

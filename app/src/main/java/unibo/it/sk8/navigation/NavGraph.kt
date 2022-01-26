@@ -1,5 +1,6 @@
 package unibo.it.sk8.navigation
 
+import android.util.Log
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
@@ -11,9 +12,11 @@ import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.InternalCoroutinesApi
 import unibo.it.auth.presentation.AuthScreen
 import unibo.it.common.navigation.Destinations
 import unibo.it.loading.presentation.LoadingScreen
+import unibo.it.lookup.presentation.LookupScreen
 import unibo.it.menu.presentation.MenuScreen
 
 
@@ -46,7 +49,6 @@ fun Nav(startDestination: String = Destinations.Loading) {
             }
         ) {
             LoadingScreen(
-                onLoading = actions.openMenu,
                 onAuthenticated = actions.openMenu,
                 onNotAuthenticated = actions.openAuthentication
             )
@@ -91,20 +93,38 @@ fun Nav(startDestination: String = Destinations.Loading) {
             )
         }
 
-        /*
-        composable(Destinations.Lookup) {
-            LookupScreen(
-                viewModel = hiltViewModel(),
-                navController = navController
-            )
+
+        composable(
+            route = Destinations.Lookup,
+         enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentScope.SlideDirection.Right,
+                    animationSpec = tween(Constants.TWEEN_DURATION)
+                )
+            }, exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentScope.SlideDirection.Left,
+                    animationSpec = tween(Constants.TWEEN_DURATION)
+                )
+            }) {
+            LookupScreen()
         }
 
-        composable(Destinations.Controls) {
-            ControlsScreen(
-                viewModel = hiltViewModel(),
-                navController = navController
-            )
-        }*/
+        composable(
+            route = Destinations.Controls,
+         enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentScope.SlideDirection.Right,
+                    animationSpec = tween(Constants.TWEEN_DURATION)
+                )
+            }, exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentScope.SlideDirection.Left,
+                    animationSpec = tween(Constants.TWEEN_DURATION)
+                )
+            }) {
+            // ControlsScreen()
+        }
 
     }
 }

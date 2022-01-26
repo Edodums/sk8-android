@@ -13,6 +13,7 @@ import com.amplifyframework.kotlin.core.Amplify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import unibo.it.auth_api.presentation.AuthState
@@ -34,15 +35,15 @@ internal class AuthViewModelImpl constructor(
             when (AuthChannelEventName.valueOf(event.name)) {
                 AuthChannelEventName.SIGNED_IN -> {
                     _authState.value = AuthState.Verified
-                    Log.i("AuthQuickstart", "Auth just became signed in")
+                    Log.i("SK8", "Auth just became signed in")
                 }
                 AuthChannelEventName.SIGNED_OUT -> {
                     _authState.value = AuthState.Sign
-                    Log.i("AuthQuickstart", "Auth just became signed out")
+                    Log.i("SK8", "Auth just became signed out")
                 }
                 AuthChannelEventName.SESSION_EXPIRED -> {
                     _authState.value = AuthState.Sign
-                    Log.i("AuthQuickstart", "Auth session just expired")
+                    Log.i("SK8", "Auth session just expired")
                 }
             }
         }
@@ -56,7 +57,9 @@ internal class AuthViewModelImpl constructor(
         }
     }
 
-    override fun loadAuthState(): Flow<AuthState> = flow { _authState }
+    override val authState: StateFlow<AuthState>
+        get() = _authState
+
 
     override suspend fun verify(code: String) {
         try {
@@ -64,12 +67,12 @@ internal class AuthViewModelImpl constructor(
 
             if (result.isSignUpComplete) {
                 _authState.value = AuthState.Verified
-                Log.i("AuthQuickstart", "Signup confirmed: $result")
+                Log.i("SK8", "Signup confirmed: $result")
             } else {
-                Log.i("AuthQuickstart", "Signup confirmation not yet complete")
+                Log.i("SK8", "Signup confirmation not yet complete")
             }
         } catch (error: AuthException) {
-            Log.e("AuthQuickstart", "Failed to confirm signup", error)
+            Log.e("SK8", "Failed to confirm signup", error)
         }
     }
 
@@ -79,16 +82,16 @@ internal class AuthViewModelImpl constructor(
         try {
             val result = Amplify.Auth.signIn(email, password)
             if (result.isSignInComplete) {
-                Log.i("AuthQuickstart", "Sign in succeeded")
+                Log.i("SK8", "Sign in succeeded")
             } else {
-                Log.e("AuthQuickstart", "Sign in not complete")
+                Log.e("SK8", "Sign in not complete")
             }
         } catch (error: AuthException.UserNotConfirmedException) {
             _authState.value = AuthState.OTP
         } catch (error: AuthException.UserNotFoundException) {
             signUp(email, password)
         } catch (error: AuthException) {
-            Log.e("AuthQuickstart", "Sign in failed", error)
+            Log.e("SK8", "Sign in failed", error)
         }
 
     }
@@ -101,9 +104,9 @@ internal class AuthViewModelImpl constructor(
         try {
             val result = Amplify.Auth.signUp(email, password, options)
             _authState.value = AuthState.OTP
-            Log.i("AuthQuickStart", "Result: $result")
+            Log.i("SK8", "Result: $result")
         } catch (error: AuthException) {
-            Log.e("AuthQuickStart", "Sign up failed", error)
+            Log.e("SK8", "Sign up failed", error)
         }
     }
 }

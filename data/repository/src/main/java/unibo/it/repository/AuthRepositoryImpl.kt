@@ -1,8 +1,7 @@
 package unibo.it.repository
 
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import unibo.it.domain.model.UserData
 import unibo.it.domain.repository.AuthRepository
 import unibo.it.repository.datasource.UserPreferenceDataSource
@@ -16,10 +15,8 @@ internal class AuthRepositoryImpl constructor(
     override suspend fun saveToken(userData: UserData) =
         userPreferenceDataSource.saveToken(userDataMapper.toRepo(userData))
 
-    override suspend fun loadData(): Flow<UserData?> = flow {
-            userPreferenceDataSource.loadData().collect { it?.let {
-                userDataMapper.toDomain(it)
-            }
+    override suspend fun loadData(): Flow<UserData> =
+        userPreferenceDataSource.loadData().map {
+            userDataMapper.toDomain(it)
         }
-    }
 }

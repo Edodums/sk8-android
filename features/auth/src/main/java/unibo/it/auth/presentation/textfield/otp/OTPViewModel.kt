@@ -1,19 +1,18 @@
 package unibo.it.auth.presentation.textfield.otp
 
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.StateFlow
 
 internal class OTPViewModel : ViewModel() {
-    private val _otpStates = MutableStateFlow<OTPStates>(OTPStates.StillNot)
     private var _otp: MutableList<String> = MutableList(size = Constant.OTP_CHARS) { "" }
     private var otp: String = ""
 
-    /**
-     * Get OTP state changes
-     */
-    fun loadOTPStates(): Flow<OTPStates> = flow { _otpStates }
+    private val _otpStates = MutableStateFlow<OTPStates>(OTPStates.StillNot)
+    val otpStates: StateFlow<OTPStates>
+        get() = _otpStates
+
+    // TODO: resend notification
 
     /**
      * add char to the OTP string

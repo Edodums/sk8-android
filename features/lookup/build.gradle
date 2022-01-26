@@ -5,4 +5,5 @@ dependencies {
     implementation(project(":libraries:common"))
     implementation(project(":features:lookup-api"))
     implementation(project(":domain"))
+    implementation Shimmer.shimmer
 }

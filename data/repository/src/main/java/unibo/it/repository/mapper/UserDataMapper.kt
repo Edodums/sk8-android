@@ -6,8 +6,8 @@ import unibo.it.repository.model.UserData as RepoUserData
 internal class UserDataMapper {
     fun toRepo(domainUserData: DomainUserData): RepoUserData =
         RepoUserData(
-            token = domainUserData.token,
-            email = domainUserData.email,
+            token = domainUserData.token ?: "",
+            email = domainUserData.email ?: "",
             deviceConnected = domainUserData.deviceConnected
         )
 
