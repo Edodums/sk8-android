@@ -6,4 +6,5 @@ dependencies {
     implementation(project(":features:lookup-api"))
     implementation(project(":domain"))
     implementation Shimmer.shimmer
+    implementation Deps.kable
 }

@@ -6,8 +6,6 @@ android {
     compileSdk Versions.compileSdk
 
     defaultConfig {
-        versionCode Releases.versionCode
-        versionName Releases.versionName
         minSdkVersion Versions.minSdk
         targetSdkVersion Versions.targetSdk
 

@@ -46,6 +46,7 @@ object Versions {
     const val gradle = "7.2.0-alpha06"
     const val bosch = "1.19.0"
 
+    const val kable = "0.13.0"
 
     const val logging = "1.12.5"
     const val logback = "1.2.6"
@@ -62,6 +63,7 @@ object Deps {
     const val logging = "io.github.microutils:kotlin-logging:${Versions.logging}"
     const val logback = "ch.qos.logback:logback-classic:${Versions.logback}"
     const val logcat = "com.squareup.logcat:logcat:${Versions.logcat}"
+    const val kable =  "com.juul.kable:core:${Versions.kable}"
     val android = AndroidDeps
     val coroutines = Coroutines
     val koin = Koin
