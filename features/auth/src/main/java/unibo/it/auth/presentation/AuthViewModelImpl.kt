@@ -3,28 +3,24 @@ package unibo.it.auth.presentation
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import com.amplifyframework.auth.AuthChannelEventName
 import com.amplifyframework.auth.AuthException
 import com.amplifyframework.auth.AuthUserAttributeKey
+import com.amplifyframework.auth.cognito.AWSCognitoUserPoolTokens
 import com.amplifyframework.auth.options.AuthSignUpOptions
 import com.amplifyframework.hub.HubChannel
 import com.amplifyframework.kotlin.core.Amplify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.launch
 import unibo.it.auth_api.presentation.AuthState
 import unibo.it.auth_api.presentation.AuthViewModel
-import unibo.it.domain.model.UserData
 import unibo.it.domain.repository.AuthRepository
 import com.amplifyframework.core.Amplify as AmplifyBacks
 
 @ExperimentalCoroutinesApi
 internal class AuthViewModelImpl constructor(
-    private val repository: AuthRepository
+    private val repository: AuthRepository // TODO: until bug about session is resolved is useless
 ) : AuthViewModel() {
     private val _authState = MutableStateFlow<AuthState>(AuthState.Sign)
     private val _lastEmail = MutableLiveData<String>()
@@ -46,14 +42,6 @@ internal class AuthViewModelImpl constructor(
                     Log.i("SK8", "Auth session just expired")
                 }
             }
-        }
-    }
-
-    suspend fun saveToken(token: String, email: String) {
-        viewModelScope.launch {
-            repository.saveToken(
-                UserData(token, email)
-            )
         }
     }
 
@@ -93,7 +81,6 @@ internal class AuthViewModelImpl constructor(
         } catch (error: AuthException) {
             Log.e("SK8", "Sign in failed", error)
         }
-
     }
 
     private suspend fun signUp(email: String, password: String) {

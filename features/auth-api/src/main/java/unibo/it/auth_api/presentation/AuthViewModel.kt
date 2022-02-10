@@ -1,14 +1,12 @@
 package unibo.it.auth_api.presentation
 
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 /**
  * ViewModel responsible to verify, signIn/Up and contains the OTP string state
  */
 abstract class AuthViewModel : ViewModel() {
-
     /**
      * Get auth state
      */

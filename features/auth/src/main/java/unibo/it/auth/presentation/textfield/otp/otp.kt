@@ -177,9 +177,6 @@ private fun OTPChar(
                     nextFocusRequester?.requestFocus()
                 }
 
-                // fix and commit
-                // fix also keyboard
-
                 if (otpState.isValid) {
                     viewModel.addOTPChar(index, otpState.text)
                 }
