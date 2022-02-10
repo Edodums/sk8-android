@@ -7,6 +7,7 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,6 +35,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -65,8 +67,7 @@ import unibo.it.lookup_api.presentation.LookupViewModel
 fun LookupScreen(
     viewModel: LookupViewModel = getViewModel()
 ) {
-    val lookupState by remember(viewModel) { viewModel }.loadLookupState()
-        .collectAsState(LookupState.Action)
+    val lookupState by viewModel.lookupState.collectAsState(LookupState.Action)
 
     Scaffold(
         backgroundColor = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -75,7 +76,7 @@ fun LookupScreen(
             when (lookupState) {
                 LookupState.Action -> ActionScreen(viewModel)
                 LookupState.Loading -> LoadingScreen()
-                LookupState.Found -> FoundScreen()
+                LookupState.Found -> FoundScreen(viewModel)
             }
         }
     )
@@ -98,12 +99,8 @@ fun ActionScreen(viewModel: LookupViewModel) {
             style = MaterialTheme.typography.titleMedium,
             textAlign = TextAlign.Center
         )
-
         Spacer(modifier = Modifier.padding(bottom = 150.dp))
-
-        Box(
-            contentAlignment = Alignment.Center
-        ) {
+        Box(contentAlignment = Alignment.Center) {
             Image(
                 painter = painterResource(id = R.drawable.circles),
                 contentDescription = "Circles around the bluetooth circle",
@@ -111,9 +108,11 @@ fun ActionScreen(viewModel: LookupViewModel) {
                     .scale(2f)
                     .zIndex(2f)
             )
-
             Button(
-                onClick = { viewModel.changeState(LookupState.Loading) },
+                onClick = {
+                    viewModel.changeState(LookupState.Loading)
+                    viewModel.handleScan()
+                },
                 modifier = Modifier
                     .size(100.dp)
                     .zIndex(3f),
@@ -132,7 +131,10 @@ fun ActionScreen(viewModel: LookupViewModel) {
 }
 
 @Composable
-fun FoundScreen() {
+fun FoundScreen(viewModel: LookupViewModel) {
+    val advertisements = viewModel.advertisements.collectAsState().value
+    val chosenDeviceName = remember { mutableStateOf("") }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -159,60 +161,72 @@ fun FoundScreen() {
                     append(stringResource(id = R.string.scan_again))
                 }
             },
-            onClick = { _ ->
-                {
-                    // coroutine scope
-                }
+            onClick = {
+                viewModel.changeState(LookupState.Loading)
             }
         )
         Spacer(modifier = Modifier.padding(24.dp))
         LazyColumn {
-            items(1) {
-                Box(
-                    modifier = Modifier
+            advertisements.forEach { advertisement ->
+                item {
+                    val locallySelected = remember { mutableStateOf(false) }
+                    val modifier = Modifier
                         .width(280.dp)
                         .height(100.dp)
                         .padding(8.dp)
                         .clip(RoundedCornerShape(10.dp))
-                        .background(lookup_device_chosen_box_primary_container),
-                    contentAlignment = Alignment.CenterStart
-                ) {
-                    Row(Modifier.padding(18.dp)) {
-                        Text(
-                            text = stringResource(id = R.string.dummy_device_1),
-                            color = Color.White,
-                            fontWeight = FontWeight.Bold
+                        .background(
+                            color = when {
+                                locallySelected.value -> {
+                                    lookup_device_chosen_box_primary_container
+                                }
+                                else -> {
+                                    Color.LightGray
+                                }
+                            }
                         )
-                        Icon(
-                            Icons.Filled.DoneOutline,
-                            contentDescription = "Chosen bluetooth device",
-                            tint = Color.White
-                        )
+                    Box(
+                        modifier = modifier.clickable {
+                            locallySelected.value = !locallySelected.value
+                            // TODO: handle the case of empty text
+                            chosenDeviceName.value = advertisement.name.toString()
+                        },
+                        contentAlignment = Alignment.CenterStart
+                    ) {
+                        advertisement.name?.let { name ->
+                            when {
+                                locallySelected.value -> {
+                                    Row(Modifier.padding(18.dp)) {
+                                        Text(
+                                            text = name,
+                                            color = Color.White,
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                        Spacer(modifier = Modifier.padding(4.dp))
+                                        Icon(
+                                            Icons.Filled.DoneOutline,
+                                            contentDescription = "Chosen bluetooth device",
+                                            tint = Color.White
+                                        )
+                                    }
+                                }
+                                else -> {
+                                    Text(
+                                        text = name,
+                                        color = Color.Black,
+                                        modifier = Modifier.padding(18.dp)
+                                    )
+                                }
+                            }
+                        }
                     }
-                }
-            }
-            items(3) {
-                Box(
-                    modifier = Modifier
-                        .width(280.dp)
-                        .height(100.dp)
-                        .padding(8.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                        .background(Color.LightGray),
-                    contentAlignment = Alignment.CenterStart,
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.dummy_device_1),
-                        color = Color.Black,
-                        modifier = Modifier.padding(18.dp)
-                    )
                 }
             }
         }
         Spacer(modifier = Modifier.padding(bottom = 16.dp))
         Button(
-            onClick = {},
-            enabled = true,
+            onClick = { viewModel.setDeviceByName(chosenDeviceName.value) },
+            enabled = chosenDeviceName.value.isNotBlank(),
             modifier = Modifier.width(300.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = lookup_found_primary,
@@ -230,7 +244,6 @@ fun FoundScreen() {
                 )
             }
         )
-
     }
 }
 
@@ -250,12 +263,10 @@ fun LoadingScreen() {
             style = MaterialTheme.typography.titleMedium,
             textAlign = TextAlign.Center
         )
-
         Spacer(modifier = Modifier.padding(bottom = 120.dp))
-
-        Box(
-            contentAlignment = Alignment.Center
-        ) {
+        Box(contentAlignment = Alignment.Center) {
+            val zIndex = 2f
+            val scaleImage = 1.8f
             val infiniteTransition = rememberInfiniteTransition()
             val angle by infiniteTransition.animateFloat(
                 initialValue = 0F,
@@ -265,9 +276,6 @@ fun LoadingScreen() {
                 )
             )
 
-            val scaleImage = 1.8f
-            val zIndex = 2f
-
             Image(
                 painter = painterResource(id = R.drawable.circles),
                 contentDescription = "Circles around the bluetooth circle",
@@ -275,7 +283,6 @@ fun LoadingScreen() {
                     .scale(scaleImage)
                     .zIndex(zIndex)
             )
-
             Image(
                 painter = painterResource(id = R.drawable.skate_lookup),
                 contentDescription = "Circles around the bluetooth circle",
@@ -287,9 +294,7 @@ fun LoadingScreen() {
                     }
             )
         }
-
         Spacer(modifier = Modifier.padding(bottom = 84.dp))
-
         LazyColumn(Modifier.shimmer()) {
             items(3) {
                 Box(
@@ -302,7 +307,5 @@ fun LoadingScreen() {
                 )
             }
         }
-
     }
-
 }
