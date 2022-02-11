@@ -7,14 +7,12 @@ internal class UserDataMapper {
     fun toRepo(domainUserData: DomainUserData): RepoUserData =
         RepoUserData(
             token = domainUserData.token ?: "",
-            email = domainUserData.email ?: "",
-            deviceConnected = domainUserData.deviceConnected
+            email = domainUserData.email ?: ""
         )
 
-    fun toDomain(viewUserData: RepoUserData): DomainUserData =
+    fun toDomain(repoUserData: RepoUserData): DomainUserData =
         DomainUserData(
-            token = viewUserData.token,
-            email = viewUserData.email,
-            deviceConnected = viewUserData.deviceConnected
+            token = repoUserData.token,
+            email = repoUserData.email
         )
 }

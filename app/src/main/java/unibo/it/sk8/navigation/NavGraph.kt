@@ -1,6 +1,5 @@
 package unibo.it.sk8.navigation
 
-import android.util.Log
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
@@ -12,7 +11,6 @@ import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.InternalCoroutinesApi
 import unibo.it.auth.presentation.AuthScreen
 import unibo.it.common.navigation.Destinations
 import unibo.it.loading.presentation.LoadingScreen
@@ -107,7 +105,9 @@ fun Nav(startDestination: String = Destinations.Loading) {
                     animationSpec = tween(Constants.TWEEN_DURATION)
                 )
             }) {
-            LookupScreen()
+            LookupScreen(
+                onPairedClick = actions.openMenu
+            )
         }
 
         composable(

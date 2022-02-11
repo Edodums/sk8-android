@@ -7,14 +7,12 @@ internal class UserMapper {
     fun toDataStore(repoUser: RepoUser): DataStoreUser =
         DataStoreUser(
             token = repoUser.token,
-            email = repoUser.email,
-            deviceConnected = repoUser.deviceConnected
+            email = repoUser.email
         )
 
     fun toRepo(dataStore: DataStoreUser): RepoUser =
         RepoUser(
             token = dataStore.token ?: "",
-            email = dataStore.email ?: "",
-            deviceConnected = dataStore.deviceConnected
+            email = dataStore.email ?: ""
         )
 }

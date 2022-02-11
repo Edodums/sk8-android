@@ -13,6 +13,7 @@ import unibo.it.controls.di.controlsModule
 import unibo.it.datastore.di.dataStoreModule
 import unibo.it.domain.di.domainModule
 import unibo.it.loading.di.loadingModule
+import unibo.it.local.di.localModule
 import unibo.it.lookup.di.lookupModule
 import unibo.it.menu.di.menuModule
 import unibo.it.repository.di.repositoryModule
@@ -40,6 +41,7 @@ class SK8 : Application() {
                     controlsModule +
                     domainModule +
                     repositoryModule +
+                    localModule +
                     dataStoreModule
             )
         }

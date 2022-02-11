@@ -47,8 +47,6 @@ class LoadingViewModelImpl constructor(
                         email = emailValue
                     )
 
-                    Log.i("SK9", "$userData lived:${emailValue} mutable:${tokenValue}")
-
                     if (check(userData)) {
                         authRepository.saveToken(userData)
                         emit(UserState.Authenticated)
