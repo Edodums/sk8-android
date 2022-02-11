@@ -43,6 +43,8 @@ dependencies {
     implementation Deps.android.room.room_ktx
     kapt Deps.android.room.room_compiler
 
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2"
+
     androidTestImplementation Deps.test.runner
     androidTestImplementation Deps.test.room
 
