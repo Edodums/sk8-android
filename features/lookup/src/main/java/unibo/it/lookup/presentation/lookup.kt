@@ -65,9 +65,13 @@ import unibo.it.lookup_api.presentation.LookupViewModel
 
 @Composable
 fun LookupScreen(
-    viewModel: LookupViewModel = getViewModel()
+    viewModel: LookupViewModel = getViewModel(),
+    onPairedClick: () -> Unit
 ) {
     val lookupState by viewModel.lookupState.collectAsState(LookupState.Action)
+    val actions = LookupActions(
+        onPairedClick = onPairedClick
+    )
 
     Scaffold(
         backgroundColor = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -77,6 +81,7 @@ fun LookupScreen(
                 LookupState.Action -> ActionScreen(viewModel)
                 LookupState.Loading -> LoadingScreen()
                 LookupState.Found -> FoundScreen(viewModel)
+                LookupState.Paired -> actions.onPairedClick()
             }
         }
     )
@@ -188,8 +193,14 @@ fun FoundScreen(viewModel: LookupViewModel) {
                     Box(
                         modifier = modifier.clickable {
                             locallySelected.value = !locallySelected.value
-                            // TODO: handle the case of empty text
-                            chosenDeviceName.value = advertisement.name.toString()
+                            when {
+                                locallySelected.value -> {
+                                    chosenDeviceName.value = advertisement.name.toString()
+                                }
+                                else -> {
+                                    chosenDeviceName.value= ""
+                                }
+                            }
                         },
                         contentAlignment = Alignment.CenterStart
                     ) {
@@ -225,7 +236,9 @@ fun FoundScreen(viewModel: LookupViewModel) {
         }
         Spacer(modifier = Modifier.padding(bottom = 16.dp))
         Button(
-            onClick = { viewModel.setDeviceByName(chosenDeviceName.value) },
+            onClick = {
+                viewModel.setDeviceByName(chosenDeviceName.value)
+            },
             enabled = chosenDeviceName.value.isNotBlank(),
             modifier = Modifier.width(300.dp),
             colors = ButtonDefaults.buttonColors(

@@ -1,4 +1,4 @@
-package unibo.it.domain.model
+package unibo.it.repository.model
 
 import java.util.*
 

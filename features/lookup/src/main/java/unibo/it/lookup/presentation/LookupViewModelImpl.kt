@@ -15,10 +15,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
 import unibo.it.common.utils.cancelChildren
 import unibo.it.common.utils.childScope
+import unibo.it.domain.usecase.device.InsertDevice
+import unibo.it.lookup.mapper.DeviceMapper
 import unibo.it.lookup_api.model.Device
 import unibo.it.lookup_api.presentation.LookupState
 import unibo.it.lookup_api.presentation.LookupViewModel
 import unibo.it.lookup_api.presentation.ScanState
+import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.cancellation.CancellationException
 
@@ -27,7 +30,11 @@ private val SCAN_DURATION_MILLIS = TimeUnit.SECONDS.toMillis(5)
 /**
  * See: https://github.com/JuulLabs/sensortag/blob/main/app/src/androidMain/kotlin/features/scan/ScanViewModel.kt
  */
-internal class LookupViewModelImpl(application: Application) :
+internal class LookupViewModelImpl(
+    application: Application,
+    private val insertDeviceUseCase: InsertDevice,
+    private val deviceMapper: DeviceMapper
+) :
     LookupViewModel(application = application) {
     private val scanner = Scanner()
     private val scanScope = viewModelScope.childScope()
@@ -48,15 +55,30 @@ internal class LookupViewModelImpl(application: Application) :
 
     override fun handleScan() {
         startScan().invokeOnCompletion {
-            Log.i("SK8", "SCAN STOPPED")
             stop()
             _lookupState.value = LookupState.Found
         }
     }
 
     override fun setDeviceByName(name: String) {
-        val advertisement = _advertisements.value.first { !it.name?.equals(name)!! }
-        // TODO: add lookup repository and finish this
+        val advertisement = _advertisements.value.first { it.name?.equals(name)!! }
+
+        viewModelScope.launch {
+            val domainDevice = deviceMapper.toDomain(
+                Device(
+                    UUID = "6E400001-B5A3-F393-E0A9-E50E24DCCA9E", //TODO: change default
+                    name = advertisement.name.toString(),
+                    address = advertisement.address,
+                    data = listOf(),
+                    createdAt = Date(),
+                    isConnected = true
+                )
+            )
+
+            insertDeviceUseCase.invoke(domainDevice)
+            clear()
+            changeState(LookupState.Paired)
+        }
     }
 
     private fun startScan(): Job {
@@ -77,7 +99,7 @@ internal class LookupViewModelImpl(application: Application) :
                     .onCompletion { cause ->
                         if (cause == null || cause is CancellationException) {
                             _scanState.value = ScanState.Stopped
-                            Log.e("SK8A", "$cause")
+                            Log.e("SK8", "$cause")
                         }
                     }
                     .filter { it.isSK8 }
