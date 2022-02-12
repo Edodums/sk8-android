@@ -42,7 +42,6 @@ class MainActivity : ComponentActivity() {
         Manifest.permission.ACCESS_COARSE_LOCATION
     )
 
-
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,7 +65,7 @@ class MainActivity : ComponentActivity() {
 
     @RequiresApi(Build.VERSION_CODES.S)
     private fun verifyBluetoothCapabilities() {
-        val bluetoothAdapter = (getSystemService(BLUETOOTH_SERVICE) as BluetoothManager).adapter
+        val bluetoothAdapter = getBluetoothAdapter()
 
         when {
             bluetoothAdapter == null ->
@@ -78,6 +77,8 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    private fun getBluetoothAdapter(): BluetoothAdapter? =
+        (getSystemService(BLUETOOTH_SERVICE) as BluetoothManager).adapter
 
     private fun askBLEPermissions(permissions: List<String>) {
         requestPermissions(permissions.filter { permission ->

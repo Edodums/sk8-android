@@ -1,7 +1,9 @@
-apply plugin: 'kotlin'
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
 
 dependencies {
     implementation(project(":domain"))
     implementation Deps.koin.core
     implementation Deps.coroutines.core
+    implementation Deps.kable
 }

@@ -54,6 +54,6 @@ interface DeviceDao {
     /**
      * Just gives the first row
      */
-    @Query("SELECT EXISTS (SELECT device_is_connected FROM device ORDER BY device_created_at DESC LIMIT 1)")
-    fun isLastDeviceConnected(): Flow<Boolean>
+    @Query("SELECT * FROM device ORDER BY device_created_at DESC LIMIT 1")
+    suspend fun getLastDevice(): Device?
 }

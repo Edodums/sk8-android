@@ -17,12 +17,14 @@ plugins {
 
 def composableModules = ['app', 'auth', 'loading', 'common', 'menu', 'controls', 'lookup']
 
-subprojects {
+allprojects {
     repositories {
         google()
         mavenCentral()
     }
+}
 
+subprojects {
     apply plugin: 'com.diffplug.spotless'
     spotless {
         kotlin {

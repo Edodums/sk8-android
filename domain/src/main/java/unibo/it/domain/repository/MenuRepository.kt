@@ -1,7 +1,16 @@
 package unibo.it.domain.repository
 
-import kotlinx.coroutines.flow.Flow
+import unibo.it.domain.model.Device
+
 
 interface MenuRepository {
-    fun isDeviceConnected(): Flow<Boolean>
+    /**
+     *
+     */
+    suspend fun getLastDevice(): Device?
+
+    /**
+     *
+     */
+    suspend fun updateDevice(device: Device)
 }

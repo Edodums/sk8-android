@@ -5,6 +5,7 @@ object Releases {
 
 object Versions {
     const val kotlin = "1.6.10"
+    const val serialization = "1.3.2"
 
     const val compileSdk = 31
     const val targetSdk = 31
@@ -91,6 +92,7 @@ object KotlinDeps {
     const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${Versions.kotlin}"
     const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
     const val extensions = "org.jetbrains.kotlin:kotlin-android-extensions:${Versions.kotlin}"
+    const val serialization = "org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.serialization}"
 }
 
 object Coroutines {

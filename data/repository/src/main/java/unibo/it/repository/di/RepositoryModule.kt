@@ -14,7 +14,7 @@ import unibo.it.repository.mapper.UserDataMapper
 val repositoryModule = module {
     // Repositories
     single<AuthRepository> { AuthRepositoryImpl(get(), get()) }
-    single<MenuRepository> { MenuRepositoryImpl(get()) }
+    single<MenuRepository> { MenuRepositoryImpl(get(), get()) }
     single<LookupRepository> { LookupRepositoryImpl(get(), get()) }
     // Mappers
     factory { UserDataMapper() }

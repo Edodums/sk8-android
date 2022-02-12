@@ -4,7 +4,9 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.juul.kable.Advertisement
+import com.juul.kable.Peripheral
 import com.juul.kable.Scanner
+import com.juul.kable.peripheral
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

@@ -1,6 +1,5 @@
 package unibo.it.repository.datasource
 
-import kotlinx.coroutines.flow.Flow
 import unibo.it.repository.model.Device
 
 interface DeviceDataSource {
@@ -38,11 +37,11 @@ interface DeviceDataSource {
      */
     suspend fun findDeviceByPrimaryKeys(
         deviceAddress: String,
-        deviceName: String
+        deviceName: String,
     ): Device?
 
     /**
      * Always get the last inserted one
      */
-    fun isLastDeviceConnected(): Flow<Boolean>
+    suspend fun getLastDevice(): Device?
 }

@@ -20,6 +20,7 @@ internal class DatabaseProvider(
     private fun buildDatabase(context: Context): AppDatabase {
         return Room
             .databaseBuilder(context, AppDatabase::class.java, "sk8-db")
+             .fallbackToDestructiveMigration()
             .addCallback(object : RoomDatabase.Callback() {
 
             })

@@ -91,10 +91,9 @@ fun Nav(startDestination: String = Destinations.Loading) {
             )
         }
 
-
         composable(
             route = Destinations.Lookup,
-         enterTransition = {
+            enterTransition = {
                 slideIntoContainer(
                     AnimatedContentScope.SlideDirection.Right,
                     animationSpec = tween(Constants.TWEEN_DURATION)
@@ -112,7 +111,7 @@ fun Nav(startDestination: String = Destinations.Loading) {
 
         composable(
             route = Destinations.Controls,
-         enterTransition = {
+            enterTransition = {
                 slideIntoContainer(
                     AnimatedContentScope.SlideDirection.Right,
                     animationSpec = tween(Constants.TWEEN_DURATION)

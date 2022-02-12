@@ -11,9 +11,13 @@ import unibo.it.local.model.Device
 
 @Database(
     entities = [Device::class],
-    version = 2, exportSchema = false
+    version = 11,
+    exportSchema = false
 )
-@TypeConverters(ListConverter::class, DateConverter::class)
+@TypeConverters(
+    ListConverter::class,
+    DateConverter::class
+)
 abstract class AppDatabase : RoomDatabase() {
     // abstract fun getSettingDao(): SettingDao
     abstract fun getDeviceDao(): DeviceDao

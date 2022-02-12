@@ -1,7 +1,7 @@
 package unibo.it.local.converter
 
 import androidx.room.TypeConverter
-import java.util.*
+import java.util.Date
 
 internal class DateConverter {
     @TypeConverter

@@ -1,6 +1,5 @@
 package unibo.it.local.datasource
 
-import kotlinx.coroutines.flow.Flow
 import unibo.it.local.mapper.DeviceMapper
 import unibo.it.local.provider.DaoProvider
 import unibo.it.repository.datasource.DeviceDataSource
@@ -8,7 +7,7 @@ import unibo.it.repository.model.Device
 
 internal class DeviceLocalDataSource(
     daoProvider: DaoProvider,
-    private val deviceMapper: DeviceMapper
+    private val deviceMapper: DeviceMapper,
 ) : DeviceDataSource {
     private val deviceDao = daoProvider.getDeviceDao()
 
@@ -26,13 +25,14 @@ internal class DeviceLocalDataSource(
 
     override suspend fun findDeviceByPrimaryKeys(
         deviceAddress: String,
-        deviceName: String
+        deviceName: String,
     ): Device? =
         deviceDao.findDeviceByPrimaryKeys(deviceAddress, deviceName)?.let {
             deviceMapper.toRepo(it)
         }
 
-    override fun isLastDeviceConnected(): Flow<Boolean> =
-        deviceDao.isLastDeviceConnected()
-
+    override suspend fun getLastDevice(): Device? =
+        deviceDao.getLastDevice()?.let { device ->
+            deviceMapper.toRepo(device)
+        }
 }

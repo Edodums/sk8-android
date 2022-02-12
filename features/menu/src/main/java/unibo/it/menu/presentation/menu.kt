@@ -1,6 +1,5 @@
 package unibo.it.menu.presentation
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -47,9 +46,9 @@ import unibo.it.menu_api.presentation.MenuViewModel
 fun MenuScreen(
     viewModel: MenuViewModel = getViewModel(),
     onNotPairedClick: () -> Unit,
-    onPairedClick: () -> Unit
+    onPairedClick: () -> Unit,
 ) {
-    val menuState by remember(viewModel) { viewModel }.isDeviceConnected()
+    val menuState by remember(viewModel) { viewModel }.menuState
         .collectAsState(MenuState.NotPaired)
 
     val actions = MenuActions(

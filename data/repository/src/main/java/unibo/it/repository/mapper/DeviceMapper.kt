@@ -10,8 +10,8 @@ internal class DeviceMapper {
             address = domainDevice.address,
             name = domainDevice.name,
             data = domainDevice.data,
-            createdAt = domainDevice.createdAt,
-            isConnected = domainDevice.isConnected
+            isConnected = domainDevice.isConnected,
+            createdAt = domainDevice.createdAt
         )
 
     fun toDomain(repoDevice: RepoDevice): DomainDevice =
@@ -20,7 +20,7 @@ internal class DeviceMapper {
             address = repoDevice.address,
             name = repoDevice.name,
             data = repoDevice.data,
-            createdAt = repoDevice.createdAt,
-            isConnected = repoDevice.isConnected
+            isConnected = repoDevice.isConnected,
+            createdAt = repoDevice.createdAt
         )
 }
