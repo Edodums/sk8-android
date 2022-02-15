@@ -1,0 +1,35 @@
+<resources>
+    <string name="cutoff_voltage_command">cutoff_voltage</string>
+    <string name="cutoff_voltage_option">_3_0_per_cell</string>
+
+    <string name="throttle_limit_command">throttle_limit</string>
+    <string name="throttle_limit_option">_PerCent_0</string>
+
+    <string name="percent_braking_command">percent_braking</string>
+    <string name="percent_braking_option">_PerCent_50</string>
+
+    <string name="initial_acc_command">initial_acc</string>
+    <string name="initial_acc_option">high</string>
+
+    <string name="motor_timing_command">motor_timing</string>
+    <string name="motor_timing_option">normal</string>
+
+    <string name="motor_rotation_command">motor_rotation</string>
+    <string name="motor_rotation_option">_normal</string>
+
+    <string name="percent_drag_brake_command">percent_drag_brake</string>
+    <string name="percent_drag_brake_option">_PerCent_0</string>
+
+    <string name="neutral_range_command">neutral_range</string>
+    <string name="neutral_range_option">_PerCent_3</string>
+
+    <string name="running_mode_command">running_mode</string>
+    <string name="running_mode_option">_fwd_pse_rev</string>
+
+    <string name="percent_throttle_reverse_command">percent_throttle_reverse</string>
+    <string name="percent_throttle_reverse_option">_PerCent_60</string>
+
+    <string name="bec_output_command">bec_output</string>
+    <string name="bec_output_option">V_6_0</string>
+
+</resources>

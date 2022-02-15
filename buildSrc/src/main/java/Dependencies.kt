@@ -93,6 +93,7 @@ object KotlinDeps {
     const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
     const val extensions = "org.jetbrains.kotlin:kotlin-android-extensions:${Versions.kotlin}"
     const val serialization = "org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.serialization}"
+    const val serializer = "org.jetbrains.kotlin:kotlin-serialization:${Versions.kotlin}"
 }
 
 object Coroutines {

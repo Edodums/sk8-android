@@ -1,7 +1,5 @@
-/*
-package unibo.it.sk8.presentation
+package unibo.it.controls.presentation
 
-import android.view.Surface
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
@@ -15,16 +13,14 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
-import androidx.compose.material3.Surface
+import androidx.compose.material.Surface
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,21 +34,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
+import org.koin.androidx.compose.getViewModel
+import unibo.it.common.ui.BasicLogo
+import unibo.it.controls.R
+import unibo.it.controls_api.presentation.ControlsViewModel
 import kotlin.math.roundToInt
-import unibo.it.sk8.R
-import unibo.it.sk8.ui.common.BasicLogo
 
 
 @Composable
 fun ControlsScreen(
-    viewModel: ControlsViewModel,
-    navController: NavHostController
+    viewModel: ControlsViewModel = getViewModel()
 ) {
-    val scope = rememberCoroutineScope()
-
     Scaffold(
-
         backgroundColor = MaterialTheme.colorScheme.onPrimaryContainer,
         topBar = { BasicLogo() },
         content = {
@@ -69,7 +62,6 @@ fun ControlsScreen(
                 Spacer(modifier = Modifier.padding(32.dp))
                 Skate()
             }
-
         }
     )
 }
@@ -124,4 +116,3 @@ fun Skate() {
         }
     }
 }
-*/

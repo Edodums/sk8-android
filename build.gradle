@@ -8,6 +8,7 @@ buildscript {
     dependencies {
         classpath Tools.androidGradlePlugin
         classpath KotlinDeps.gradlePlugin
+        classpath KotlinDeps.serializer
     }
 }
 
@@ -15,7 +16,7 @@ plugins {
     id 'com.diffplug.spotless' version '6.0.0'
 }
 
-def composableModules = ['app', 'auth', 'loading', 'common', 'menu', 'controls', 'lookup']
+def composableModules = ['app', 'auth', 'loading', 'common', 'menu', 'controls', 'lookup', 'settings']
 
 allprojects {
     repositories {

@@ -64,7 +64,6 @@ internal class LookupViewModelImpl(
 
     override fun setDeviceByName(name: String) {
         val advertisement = _advertisements.value.first { it.name?.equals(name)!! }
-
         viewModelScope.launch {
             val domainDevice = deviceMapper.toDomain(
                 Device(

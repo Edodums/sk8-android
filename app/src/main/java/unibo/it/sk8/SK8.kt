@@ -17,6 +17,7 @@ import unibo.it.local.di.localModule
 import unibo.it.lookup.di.lookupModule
 import unibo.it.menu.di.menuModule
 import unibo.it.repository.di.repositoryModule
+import unibo.it.settings.di.settingsModule
 import unibo.it.sk8.di.appModule
 
 
@@ -39,6 +40,7 @@ class SK8 : Application() {
                     menuModule +
                     lookupModule +
                     controlsModule +
+                    settingsModule +
                     domainModule +
                     repositoryModule +
                     localModule +

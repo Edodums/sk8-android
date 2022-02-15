@@ -1,0 +1,13 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlinx-serialization'
+
+dependencies {
+    implementation(project(":libraries:common"))
+    implementation(project(":features:settings-api"))
+    implementation(project(":domain"))
+
+    implementation KotlinDeps.serialization
+    implementation Deps.coroutines.core
+    implementation Deps.kable
+}

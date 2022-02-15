@@ -6,4 +6,5 @@ object Destinations {
     const val Menu = "menu"
     const val Lookup = "lookup"
     const val Controls = "controls"
+    const val Settings = "settings"
 }
