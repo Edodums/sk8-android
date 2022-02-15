@@ -32,9 +32,7 @@ peripheral.observe(readCharacteristic) {
 
 /*fun writeToEsp32(peripheral: Peripheral, data: String): () -> Unit = {
     CoroutineScope(Dispatchers.IO).launch {
-        Log.i("TUTELA", "AMBIENTA")
         runCatching {
-            Log.i("TUTELA", "AMBIENTA DENTRO")
             peripheral.write(
                 writeCharacteristic,
                 data.toByteArray(),
