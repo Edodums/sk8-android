@@ -69,8 +69,7 @@ private fun OTPScreen(
     authViewModel: AuthViewModel = getViewModel()
 ) {
     val scale = 0.8f
-    val otpState by remember(viewModel) { viewModel }.loadOTPStates()
-        .collectAsState(OTPStates.StillNot)
+    val otpState by viewModel.otpStates.collectAsState(OTPStates.StillNot)
     val coroutinesScope = rememberCoroutineScope()
     val focusManager = LocalFocusManager.current
 
@@ -177,9 +176,6 @@ private fun OTPChar(
                 if (it.length == onlyOne) {
                     nextFocusRequester?.requestFocus()
                 }
-
-                // fix and commit
-                // fix also keyboard
 
                 if (otpState.isValid) {
                     viewModel.addOTPChar(index, otpState.text)

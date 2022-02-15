@@ -2,7 +2,6 @@ package unibo.it.sk8.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-
 val md_theme_light_primary = Color(0xFF6750A4)
 val md_theme_light_onPrimary = Color(0xFFFFFFFF)
 val md_theme_light_primaryContainer = Color(0xFFEADDFF)
@@ -58,7 +57,4 @@ val md_theme_dark_inverseSurface = Color(0xFFE6E1E5)
 val seed = Color(0xFF6750A4)
 val error = Color(0xFFB3261E)
 
-
 val lunacy_auth_background = Color(0xFF4611A8)
-val lookup_found_primary = Color(0xFFA827C8)
-val lookup_device_chosen_box_primary_container = Color(0xFF5600F5)

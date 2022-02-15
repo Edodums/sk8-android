@@ -12,5 +12,5 @@ interface AuthRepository {
     /**
      * Get user data
      */
-    suspend fun loadData(): Flow<UserData?>
+    suspend fun loadData(): Flow<UserData>
 }

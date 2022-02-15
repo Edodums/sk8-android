@@ -13,8 +13,11 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import unibo.it.auth.presentation.AuthScreen
 import unibo.it.common.navigation.Destinations
+import unibo.it.controls.presentation.ControlsScreen
 import unibo.it.loading.presentation.LoadingScreen
+import unibo.it.lookup.presentation.LookupScreen
 import unibo.it.menu.presentation.MenuScreen
+import unibo.it.settings.presentation.SettingsScreen
 
 
 /**
@@ -46,7 +49,6 @@ fun Nav(startDestination: String = Destinations.Loading) {
             }
         ) {
             LoadingScreen(
-                onLoading = actions.openMenu,
                 onAuthenticated = actions.openMenu,
                 onNotAuthenticated = actions.openAuthentication
             )
@@ -87,24 +89,61 @@ fun Nav(startDestination: String = Destinations.Loading) {
         ) {
             MenuScreen(
                 onNotPairedClick = actions.openLookup,
-                onPairedClick = actions.openControls
+                onPairedClick = actions.openControls,
+                onSettingsButtonClick = actions.openSettings
             )
         }
 
-        /*
-        composable(Destinations.Lookup) {
+        composable(
+            route = Destinations.Lookup,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentScope.SlideDirection.Right,
+                    animationSpec = tween(Constants.TWEEN_DURATION)
+                )
+            }, exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentScope.SlideDirection.Left,
+                    animationSpec = tween(Constants.TWEEN_DURATION)
+                )
+            }) {
             LookupScreen(
-                viewModel = hiltViewModel(),
-                navController = navController
+                onPairedClick = actions.openMenu
             )
         }
 
-        composable(Destinations.Controls) {
-            ControlsScreen(
-                viewModel = hiltViewModel(),
-                navController = navController
-            )
-        }*/
+        composable(
+            route = Destinations.Controls,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentScope.SlideDirection.Right,
+                    animationSpec = tween(Constants.TWEEN_DURATION)
+                )
+            }, exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentScope.SlideDirection.Left,
+                    animationSpec = tween(Constants.TWEEN_DURATION)
+                )
+            }) {
+            ControlsScreen()
+        }
+
+
+        composable(
+            route = Destinations.Settings,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentScope.SlideDirection.Right,
+                    animationSpec = tween(Constants.TWEEN_DURATION)
+                )
+            }, exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentScope.SlideDirection.Left,
+                    animationSpec = tween(Constants.TWEEN_DURATION)
+                )
+            }) {
+            SettingsScreen(onSavingClick = actions.openMenu)
+        }
 
     }
 }
@@ -124,6 +163,10 @@ internal data class Actions(val navController: NavHostController) {
 
     val openLookup: () -> Unit = {
         navController.navigate(Destinations.Lookup)
+    }
+
+    val openSettings: () -> Unit = {
+        navController.navigate(Destinations.Settings)
     }
 }
 

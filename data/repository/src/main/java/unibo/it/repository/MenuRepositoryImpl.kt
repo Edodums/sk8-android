@@ -1,17 +1,20 @@
 package unibo.it.repository
 
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
+import unibo.it.domain.model.Device
 import unibo.it.domain.repository.MenuRepository
-import unibo.it.repository.datasource.UserPreferenceDataSource
+import unibo.it.repository.datasource.DeviceDataSource
+import unibo.it.repository.mapper.DeviceMapper
 
 internal class MenuRepositoryImpl(
-    private val userPreferenceDataSource: UserPreferenceDataSource
+    private val deviceDataSource: DeviceDataSource,
+    private val deviceMapper: DeviceMapper,
 ) : MenuRepository {
-    override suspend fun isDeviceConnected(): Flow<Boolean> = flow {
-        userPreferenceDataSource.loadData().map {
-            it?.deviceConnected
+    override suspend fun getLastDevice(): Device? =
+        deviceDataSource.getLastDevice()?.let {
+            deviceMapper.toDomain(it)
         }
+
+    override suspend fun updateDevice(device: Device) {
+        deviceDataSource.updateDevice(deviceMapper.toRepo(device))
     }
 }

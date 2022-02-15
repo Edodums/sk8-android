@@ -67,8 +67,7 @@ fun AuthScreen(
     viewModel: AuthViewModel = getViewModel(),
     onVerified: () -> Unit
 ) {
-    val authState by remember(viewModel) { viewModel }.loadAuthState()
-        .collectAsState(AuthState.Sign)
+    val authState by viewModel.authState.collectAsState(AuthState.Sign)
     val actions = AuthActions(
         onVerified = onVerified
     )

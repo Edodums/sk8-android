@@ -5,4 +5,7 @@ dependencies {
     implementation(project(":libraries:common"))
     implementation(project(":features:controls-api"))
     implementation(project(":domain"))
+
+    implementation Deps.coroutines.core
+    implementation Deps.kable
 }

@@ -1,9 +1,11 @@
-apply plugin: 'kotlin'
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
 
 dependencies {
     implementation Deps.koin.core
     implementation Deps.logging
     implementation Deps.coroutines.core
+    implementation Deps.kable
 
     testImplementation Deps.test.junit
     testImplementation Deps.test.mockk

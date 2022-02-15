@@ -3,17 +3,21 @@ package unibo.it.menu.presentation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.GenericShape
+import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.PlayCircleOutline
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -46,19 +50,44 @@ import unibo.it.menu_api.presentation.MenuViewModel
 fun MenuScreen(
     viewModel: MenuViewModel = getViewModel(),
     onNotPairedClick: () -> Unit,
-    onPairedClick: () -> Unit
+    onPairedClick: () -> Unit,
+    onSettingsButtonClick: () -> Unit,
 ) {
-    val menuState by remember(viewModel) { viewModel }.isDeviceConnected()
+    val menuState by remember(viewModel) { viewModel }.menuState
         .collectAsState(MenuState.NotPaired)
 
     val actions = MenuActions(
         onNotPairedClick = onNotPairedClick,
-        onPairedClick = onPairedClick
+        onPairedClick = onPairedClick,
+        onSettingsButtonClick = onSettingsButtonClick
     )
 
     Scaffold(
         backgroundColor = MaterialTheme.colorScheme.onPrimaryContainer,
-        topBar = { BasicLogo() },
+        topBar = {
+            when (menuState) {
+                MenuState.NotPaired -> BasicLogo()
+                MenuState.Paired -> {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(200.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        BasicLogo()
+                        IconButton(onClick = {
+                            actions.onSettingsButtonClick()
+                        }) {
+                            Icon(
+                                imageVector = Icons.Outlined.Settings,
+                                contentDescription = "Settings screen",
+                                tint = Color.Black,
+                                modifier = Modifier.size(36.dp)
+                            )
+                        }
+                    }
+                }
+            }
+        },
         content = {
             when (menuState) {
                 MenuState.NotPaired -> NotPairedScreen(onNotPairedClick = actions.onNotPairedClick)
@@ -115,7 +144,7 @@ fun StartScreen(onPairedClick: () -> Unit) {
                     tint = Color.White
                 )
                 Text(
-                    buildAnnotatedString {
+                    text = buildAnnotatedString {
                         withStyle(
                             style = SpanStyle(
                                 fontWeight = FontWeight.Bold
@@ -125,7 +154,7 @@ fun StartScreen(onPairedClick: () -> Unit) {
                         }
                         append(" ")
                         append(stringResource(id = R.string.skatin))
-                    },
+                    }, /* Remember that if displays the wrong text just do a Build -> recompile string.xml (you need to open a string.xml before) */
                     fontSize = 24.sp,
                     textAlign = TextAlign.Left
                 )

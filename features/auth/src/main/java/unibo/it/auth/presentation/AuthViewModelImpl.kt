@@ -3,27 +3,24 @@ package unibo.it.auth.presentation
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import com.amplifyframework.auth.AuthChannelEventName
 import com.amplifyframework.auth.AuthException
 import com.amplifyframework.auth.AuthUserAttributeKey
+import com.amplifyframework.auth.cognito.AWSCognitoUserPoolTokens
 import com.amplifyframework.auth.options.AuthSignUpOptions
 import com.amplifyframework.hub.HubChannel
 import com.amplifyframework.kotlin.core.Amplify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.StateFlow
 import unibo.it.auth_api.presentation.AuthState
 import unibo.it.auth_api.presentation.AuthViewModel
-import unibo.it.domain.model.UserData
 import unibo.it.domain.repository.AuthRepository
 import com.amplifyframework.core.Amplify as AmplifyBacks
 
 @ExperimentalCoroutinesApi
 internal class AuthViewModelImpl constructor(
-    private val repository: AuthRepository
+    private val repository: AuthRepository // TODO: until bug about session is resolved is useless
 ) : AuthViewModel() {
     private val _authState = MutableStateFlow<AuthState>(AuthState.Sign)
     private val _lastEmail = MutableLiveData<String>()
@@ -34,29 +31,23 @@ internal class AuthViewModelImpl constructor(
             when (AuthChannelEventName.valueOf(event.name)) {
                 AuthChannelEventName.SIGNED_IN -> {
                     _authState.value = AuthState.Verified
-                    Log.i("AuthQuickstart", "Auth just became signed in")
+                    Log.i("SK8", "Auth just became signed in")
                 }
                 AuthChannelEventName.SIGNED_OUT -> {
                     _authState.value = AuthState.Sign
-                    Log.i("AuthQuickstart", "Auth just became signed out")
+                    Log.i("SK8", "Auth just became signed out")
                 }
                 AuthChannelEventName.SESSION_EXPIRED -> {
                     _authState.value = AuthState.Sign
-                    Log.i("AuthQuickstart", "Auth session just expired")
+                    Log.i("SK8", "Auth session just expired")
                 }
             }
         }
     }
 
-    suspend fun saveToken(token: String, email: String) {
-        viewModelScope.launch {
-            repository.saveToken(
-                UserData(token, email)
-            )
-        }
-    }
+    override val authState: StateFlow<AuthState>
+        get() = _authState
 
-    override fun loadAuthState(): Flow<AuthState> = flow { _authState }
 
     override suspend fun verify(code: String) {
         try {
@@ -64,12 +55,12 @@ internal class AuthViewModelImpl constructor(
 
             if (result.isSignUpComplete) {
                 _authState.value = AuthState.Verified
-                Log.i("AuthQuickstart", "Signup confirmed: $result")
+                Log.i("SK8", "Signup confirmed: $result")
             } else {
-                Log.i("AuthQuickstart", "Signup confirmation not yet complete")
+                Log.i("SK8", "Signup confirmation not yet complete")
             }
         } catch (error: AuthException) {
-            Log.e("AuthQuickstart", "Failed to confirm signup", error)
+            Log.e("SK8", "Failed to confirm signup", error)
         }
     }
 
@@ -79,18 +70,17 @@ internal class AuthViewModelImpl constructor(
         try {
             val result = Amplify.Auth.signIn(email, password)
             if (result.isSignInComplete) {
-                Log.i("AuthQuickstart", "Sign in succeeded")
+                Log.i("SK8", "Sign in succeeded")
             } else {
-                Log.e("AuthQuickstart", "Sign in not complete")
+                Log.e("SK8", "Sign in not complete")
             }
         } catch (error: AuthException.UserNotConfirmedException) {
             _authState.value = AuthState.OTP
         } catch (error: AuthException.UserNotFoundException) {
             signUp(email, password)
         } catch (error: AuthException) {
-            Log.e("AuthQuickstart", "Sign in failed", error)
+            Log.e("SK8", "Sign in failed", error)
         }
-
     }
 
     private suspend fun signUp(email: String, password: String) {
@@ -101,9 +91,9 @@ internal class AuthViewModelImpl constructor(
         try {
             val result = Amplify.Auth.signUp(email, password, options)
             _authState.value = AuthState.OTP
-            Log.i("AuthQuickStart", "Result: $result")
+            Log.i("SK8", "Result: $result")
         } catch (error: AuthException) {
-            Log.e("AuthQuickStart", "Sign up failed", error)
+            Log.e("SK8", "Sign up failed", error)
         }
     }
 }

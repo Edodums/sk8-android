@@ -1,8 +1,12 @@
 package unibo.it.menu_api.presentation
 
-import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.flow.Flow
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import kotlinx.coroutines.flow.StateFlow
 
-abstract class MenuViewModel : ViewModel() {
-    abstract fun isDeviceConnected(): Flow<Boolean>
+abstract class MenuViewModel(application: Application) : AndroidViewModel(application) {
+    /**
+     *
+     */
+    abstract val menuState: StateFlow<MenuState>
 }

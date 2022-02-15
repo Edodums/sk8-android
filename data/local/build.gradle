@@ -6,8 +6,6 @@ android {
     compileSdk Versions.compileSdk
 
     defaultConfig {
-        versionCode Releases.versionCode
-        versionName Releases.versionName
         minSdkVersion Versions.minSdk
         targetSdkVersion Versions.targetSdk
 
@@ -44,6 +42,10 @@ dependencies {
     implementation Deps.android.room.room_runtime
     implementation Deps.android.room.room_ktx
     kapt Deps.android.room.room_compiler
+
+    implementation KotlinDeps.serialization
+    implementation Deps.coroutines.core
+    implementation Deps.kable
 
     androidTestImplementation Deps.test.runner
     androidTestImplementation Deps.test.room

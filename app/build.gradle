@@ -28,6 +28,9 @@ dependencies {
   implementation(project(":features:controls-api"))
   implementation(project(":features:controls"))
 
+  implementation(project(":features:settings-api"))
+  implementation(project(":features:settings"))
+
   implementation Deps.logcat
   implementation Deps.accompanist.animation
 

@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 abstract class LoadingViewModel : ViewModel() {
     /**
-     * Get user state
+     * Handles user state
      */
-    abstract fun loadUserState() : Flow<UserState>
+    abstract val userState : Flow<UserState>
 }
