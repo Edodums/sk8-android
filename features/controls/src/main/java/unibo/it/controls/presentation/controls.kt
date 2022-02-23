@@ -60,7 +60,7 @@ fun ControlsScreen(
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.padding(32.dp))
-                Skate()
+                Skate(viewModel)
             }
         }
     )
@@ -68,7 +68,7 @@ fun ControlsScreen(
 
 
 @Composable
-fun Skate() {
+fun Skate(viewModel: ControlsViewModel) {
     val offsetFix = 60
     val min = 0.dp
     val max = 70.dp
@@ -90,6 +90,7 @@ fun Skate() {
                 state = rememberDraggableState { delta ->
                     val newValue = offsetY + delta
                     offsetY = newValue.coerceIn(minPx, maxPx)
+                    viewModel.speedHandler(offsetY)
                 }
             )
             .drawWithContent {

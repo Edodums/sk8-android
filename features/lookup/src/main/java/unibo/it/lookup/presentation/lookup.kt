@@ -1,5 +1,6 @@
 package unibo.it.lookup.presentation
 
+import android.util.Log
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
@@ -33,6 +34,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -54,6 +56,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import com.juul.kable.Advertisement
 import com.valentinilk.shimmer.shimmer
 import org.koin.androidx.compose.getViewModel
 import unibo.it.common.ui.BasicLogo
@@ -138,7 +141,9 @@ fun ActionScreen(viewModel: LookupViewModel) {
 @Composable
 fun FoundScreen(viewModel: LookupViewModel) {
     val advertisements = viewModel.advertisements.collectAsState().value
+    val areAdvertisementFound = remember { mutableStateOf(advertisements.isNotEmpty()) }
     val chosenDeviceName = remember { mutableStateOf("") }
+    Log.i("ADV SPSAAA", advertisements.toString())
 
     Column(
         modifier = Modifier
@@ -168,72 +173,15 @@ fun FoundScreen(viewModel: LookupViewModel) {
             },
             onClick = {
                 viewModel.changeState(LookupState.Loading)
+                viewModel.handleScan()
             }
         )
         Spacer(modifier = Modifier.padding(24.dp))
-        LazyColumn {
-            advertisements.forEach { advertisement ->
-                item {
-                    val locallySelected = remember { mutableStateOf(false) }
-                    val modifier = Modifier
-                        .width(280.dp)
-                        .height(100.dp)
-                        .padding(8.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                        .background(
-                            color = when {
-                                locallySelected.value -> {
-                                    lookup_device_chosen_box_primary_container
-                                }
-                                else -> {
-                                    Color.LightGray
-                                }
-                            }
-                        )
-                    Box(
-                        modifier = modifier.clickable {
-                            locallySelected.value = !locallySelected.value
-                            when {
-                                locallySelected.value -> {
-                                    chosenDeviceName.value = advertisement.name.toString()
-                                }
-                                else -> {
-                                    chosenDeviceName.value= ""
-                                }
-                            }
-                        },
-                        contentAlignment = Alignment.CenterStart
-                    ) {
-                        advertisement.name?.let { name ->
-                            when {
-                                locallySelected.value -> {
-                                    Row(Modifier.padding(18.dp)) {
-                                        Text(
-                                            text = name,
-                                            color = Color.White,
-                                            fontWeight = FontWeight.Bold
-                                        )
-                                        Spacer(modifier = Modifier.padding(4.dp))
-                                        Icon(
-                                            Icons.Filled.DoneOutline,
-                                            contentDescription = "Chosen bluetooth device",
-                                            tint = Color.White
-                                        )
-                                    }
-                                }
-                                else -> {
-                                    Text(
-                                        text = name,
-                                        color = Color.Black,
-                                        modifier = Modifier.padding(18.dp)
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        ColumnSection(
+            advertisements = advertisements,
+            areAdvertisementFound = areAdvertisementFound.value,
+            chosenDeviceName = chosenDeviceName
+        )
         Spacer(modifier = Modifier.padding(bottom = 16.dp))
         Button(
             onClick = {
@@ -257,6 +205,100 @@ fun FoundScreen(viewModel: LookupViewModel) {
                 )
             }
         )
+    }
+}
+
+@Composable
+fun ColumnSection(
+    advertisements: List<Advertisement>,
+    areAdvertisementFound: Boolean,
+    chosenDeviceName: MutableState<String>
+) {
+    if (areAdvertisementFound) AdvertisementsColumn(
+        advertisements = advertisements,
+        chosenDeviceName = chosenDeviceName
+    ) else NothingFound()
+}
+
+@Composable
+fun NothingFound() {
+    Text(
+        text = "No device was found", // MultiModule project have a string.xml build bug
+        color = Color.Black,
+        fontWeight = FontWeight.Bold,
+        style = MaterialTheme.typography.displayMedium,
+        fontSize = 22.sp,
+        textAlign = TextAlign.Center
+    )
+}
+
+@Composable
+fun AdvertisementsColumn(
+    advertisements: List<Advertisement>,
+    chosenDeviceName: MutableState<String>
+) {
+    LazyColumn {
+        advertisements.forEach { advertisement ->
+            item {
+                val locallySelected = remember { mutableStateOf(false) }
+                val modifier = Modifier
+                    .width(280.dp)
+                    .height(100.dp)
+                    .padding(8.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(
+                        color = when {
+                            locallySelected.value -> {
+                                lookup_device_chosen_box_primary_container
+                            }
+                            else -> {
+                                Color.LightGray
+                            }
+                        }
+                    )
+                Box(
+                    modifier = modifier.clickable {
+                        locallySelected.value = !locallySelected.value
+                        when {
+                            locallySelected.value -> {
+                                chosenDeviceName.value = advertisement.name.toString()
+                            }
+                            else -> {
+                                chosenDeviceName.value = ""
+                            }
+                        }
+                    },
+                    contentAlignment = Alignment.CenterStart
+                ) {
+                    advertisement.name?.let { name ->
+                        when {
+                            locallySelected.value -> {
+                                Row(Modifier.padding(18.dp)) {
+                                    Text(
+                                        text = name,
+                                        color = Color.White,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                    Spacer(modifier = Modifier.padding(4.dp))
+                                    Icon(
+                                        Icons.Filled.DoneOutline,
+                                        contentDescription = "Chosen bluetooth device",
+                                        tint = Color.White
+                                    )
+                                }
+                            }
+                            else -> {
+                                Text(
+                                    text = name,
+                                    color = Color.Black,
+                                    modifier = Modifier.padding(18.dp)
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 

@@ -8,6 +8,6 @@ import unibo.it.controls_api.presentation.ControlsViewModel
 
 val controlsModule = module {
     viewModel<ControlsViewModel>() {
-        ControlsViewModelImpl(androidApplication())
+        ControlsViewModelImpl(androidApplication(), get())
     }
 }

@@ -56,7 +56,7 @@ suspend fun observeEsp32(peripheral: Peripheral) = flow {
     }
 }*/
 
-fun CoroutineScope.enableAutoReconnect(peripheral: Peripheral) {
+fun CoroutineScope.enableAutoReconnect(peripheral: Peripheral, scope: CoroutineScope) {
     val connectionAttempt = AtomicInteger()
     peripheral.state
         .filter { it is State.Disconnected }
@@ -67,7 +67,7 @@ fun CoroutineScope.enableAutoReconnect(peripheral: Peripheral) {
             delay(timeMillis)
             peripheral.connect()
         }
-        .launchIn(this)
+        .launchIn(scope)
 }
 
 private fun backoff(

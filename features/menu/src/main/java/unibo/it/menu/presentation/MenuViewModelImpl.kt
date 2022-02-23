@@ -4,10 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.juul.kable.ConnectionLostException
-import com.juul.kable.Peripheral
 import com.juul.kable.State
-import com.juul.kable.WriteType
-import com.juul.kable.characteristicOf
 import com.juul.kable.peripheral
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -15,7 +12,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import unibo.it.common.ble.getBluetoothManager
 import unibo.it.domain.repository.MenuRepository
 import unibo.it.menu_api.presentation.MenuState
@@ -38,7 +34,9 @@ internal class MenuViewModelImpl(
             val bluetoothAdapter = getBluetoothManager(application.applicationContext).adapter
 
             lastDevice?.address?.let {
-                val peripheral = CoroutineScope(Dispatchers.IO).peripheral(bluetoothDevice = bluetoothAdapter.getRemoteDevice(it)) {
+                val peripheral = CoroutineScope(Dispatchers.IO).peripheral(
+                    bluetoothDevice = bluetoothAdapter.getRemoteDevice(it)
+                ) {
                     onServicesDiscovered {
                         requestMtu(mtu)
                     }
@@ -48,6 +46,8 @@ internal class MenuViewModelImpl(
                     peripheral.connect()
                 } catch (cause: ConnectionLostException) {
                     Log.e("SK8", "$cause")
+                } catch (ex: Exception) {
+                    Log.e("SK8", "$ex")
                 }
 
                 peripheral.state.value.let { state ->
@@ -73,6 +73,10 @@ internal class MenuViewModelImpl(
                         }
                         is State.Disconnected -> {
                             Log.i("SK8", "Disconnected device")
+                            lastDevice.let { device ->
+                                device.isConnected = false
+                                menuRepository.updateDevice(device)
+                            }
                             _menuState.value = MenuState.NotPaired
                         }
                     }
