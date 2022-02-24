@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.juul.kable.ConnectionLostException
 import com.juul.kable.Peripheral
+import com.juul.kable.State
 import com.juul.kable.WriteType
 import com.juul.kable.peripheral
 import kotlinx.coroutines.CoroutineScope
@@ -54,10 +55,42 @@ internal class SettingsViewModelImpl(
                 }
 
                 try {
-                    viewModelScope.enableAutoReconnect(peripheral)
                     peripheral.connect()
+                    viewModelScope.enableAutoReconnect(peripheral, viewModelScope)
                 } catch (cause: ConnectionLostException) {
                     Log.e("SK8", "$cause")
+                } catch (ex: Exception) {
+                    Log.e("SK8", "$ex")
+                }
+
+                peripheral.state.value.let { state ->
+                    when (state) {
+                        State.Connected -> {
+                            lastDevice.let { device ->
+                                device.isConnected = true
+                                menuRepository.updateDevice(device)
+                            }
+                        }
+                        State.Connecting.Bluetooth -> {
+                            Log.i("SK8", "Connecting device to Bluetooth")
+                        }
+                        State.Connecting.Services -> {
+                            Log.i("SK8", "Connecting device to Services")
+                        }
+                        State.Connecting.Observes -> {
+                            Log.i("SK8", "Connecting device to Observes")
+                        }
+                        State.Disconnecting -> {
+                            Log.i("SK8", "Disconnecting device")
+                        }
+                        is State.Disconnected -> {
+                            Log.i("SK8", "Disconnected device")
+                            lastDevice.let { device ->
+                                device.isConnected = false
+                                menuRepository.updateDevice(device)
+                            }
+                        }
+                    }
                 }
             }
         }

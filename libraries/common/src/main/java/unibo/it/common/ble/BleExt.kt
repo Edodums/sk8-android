@@ -32,9 +32,7 @@ peripheral.observe(readCharacteristic) {
 
 /*fun writeToEsp32(peripheral: Peripheral, data: String): () -> Unit = {
     CoroutineScope(Dispatchers.IO).launch {
-        Log.i("TUTELA", "AMBIENTA")
         runCatching {
-            Log.i("TUTELA", "AMBIENTA DENTRO")
             peripheral.write(
                 writeCharacteristic,
                 data.toByteArray(),
@@ -58,7 +56,7 @@ suspend fun observeEsp32(peripheral: Peripheral) = flow {
     }
 }*/
 
-fun CoroutineScope.enableAutoReconnect(peripheral: Peripheral) {
+fun CoroutineScope.enableAutoReconnect(peripheral: Peripheral, scope: CoroutineScope) {
     val connectionAttempt = AtomicInteger()
     peripheral.state
         .filter { it is State.Disconnected }
@@ -69,7 +67,7 @@ fun CoroutineScope.enableAutoReconnect(peripheral: Peripheral) {
             delay(timeMillis)
             peripheral.connect()
         }
-        .launchIn(this)
+        .launchIn(scope)
 }
 
 private fun backoff(

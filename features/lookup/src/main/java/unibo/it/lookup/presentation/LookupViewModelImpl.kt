@@ -27,7 +27,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.cancellation.CancellationException
 
-private val SCAN_DURATION_MILLIS = TimeUnit.SECONDS.toMillis(5)
+private val SCAN_DURATION_MILLIS = TimeUnit.SECONDS.toMillis(10)
 
 /**
  * See: https://github.com/JuulLabs/sensortag/blob/main/app/src/androidMain/kotlin/features/scan/ScanViewModel.kt
